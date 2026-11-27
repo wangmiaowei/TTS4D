@@ -12,8 +12,7 @@
     if (!a) return;
     if (url) a.href = url; else { a.classList.add("disabled"); a.title = "coming soon"; }
   }
-  setLink("lnk-paper", C.paper);
-  setLink("lnk-arxiv", C.arxiv);
+  setLink("lnk-paper", C.arxiv);
   if (C.youtubeId) {
     const w = $("#yt-wrap");
     w.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + C.youtubeId +
