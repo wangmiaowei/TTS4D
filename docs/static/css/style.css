@@ -398,3 +398,5 @@ sup { font-size: .62em; }
 #method .two > .fig figcaption { font-size: 13px; }
 
 @media (prefers-color-scheme: dark) { .epi-plot, .fig img { background: #fff; } }
+.two.unc .fig img { max-height: none; width: 100%; }
+.two.unc .tbl th, .two.unc .tbl td { padding: 5px 6px; }
