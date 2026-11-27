@@ -353,4 +353,5 @@ sup { font-size: .62em; }
 
 /* uncertainty: the right card is a column, its table sits at the bottom so it lines up with the end of the left card */
 #uncertainty .two > figure.card { display: flex; flex-direction: column; height: 100%; box-sizing: border-box; }
-#uncertainty .two > figure.card .tbl-wrap { margin-top: auto; padding-top: 12px; }
+#uncertainty .two > figure.card .tbl-wrap { flex: 1 1 auto; display: flex; flex-direction: column; padding-top: 4px; }
+#uncertainty .two > figure.card .tbl { flex: 1 1 auto; }
