@@ -197,6 +197,7 @@ sup { font-size: .62em; }
 .text { padding: 24px; }
 .text h3 { margin: 0 0 6px; font-size: 18px; }
 .text p { color: var(--ink-2); margin: 0 0 18px; }
+.inline-fig { width: 100%; border-radius: 10px; margin: -4px 0 20px; background: #fff; }
 .avs { padding: 20px; margin-top: 24px; }
 .avs h3 { margin: 0 0 4px; }
 .avs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
