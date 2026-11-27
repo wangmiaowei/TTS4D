@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TTS Live Demo</title>
+<link rel="icon" href="static/img/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; font: 16px/1.6 Inter, system-ui, sans-serif; color: #fff;
+    background: radial-gradient(900px 500px at 20% 10%, #1d2a6b, transparent 60%), radial-gradient(800px 500px at 85% 80%, #3a1d6b, transparent 60%), #0a0f24;
+    padding: 24px max(16px, env(safe-area-inset-left)); }
+  .box { max-width: 620px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); border-radius: 20px; padding: 36px 34px;
+    backdrop-filter: blur(10px); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  h1 { margin: 0 0 12px; font-size: 28px; font-weight: 800; }
+  p { color: #c8cfea; margin: 0 0 14px; }
+  .note { background: rgba(255,190,80,.12); border: 1px solid rgba(255,190,80,.35); color: #ffe2a8; border-radius: 12px; padding: 12px 14px; font-size: 14.5px; }
+  ul { color: #c8cfea; margin: 6px 0 22px; padding-left: 20px; }
+  .go { display: inline-block; padding: 14px 26px; border-radius: 999px; font-weight: 700; color: #fff; text-decoration: none;
+    background: linear-gradient(90deg, #2f7bff, #8a4dff); box-shadow: 0 10px 28px rgba(80,90,255,.4); }
+  .go:hover { filter: brightness(1.1); }
+  .back { display: inline-block; margin-left: 16px; color: #9fb0e8; text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>Interactive 4D viewer</h1>
+    <p>Fly through dynamic and static scenes in real time: move the camera (W/A/S/D, drag), scrub time, change the number of input views,
+      and switch on the uncertainty map.</p>
+    <p class="note">&#9203; <b>Please be patient.</b> Every frame is rendered on a single cloud GPU and relayed through several network hops before it reaches you,
+      so the first frames can take a few seconds and interaction may lag. We are moving the demo to a faster cloud platform.</p>
+    <ul>
+      <li>Best experienced on a desktop browser.</li>
+      <li>If the page does not respond, the GPU may be busy &mdash; please try again a bit later.</li>
+    </ul>
+    <a class="go" id="go" href="#" rel="noopener">Open the viewer &rarr;</a>
+    <a class="back" href="./">&larr; Back to the project page</a>
+  </div>
+<script src="static/js/config.js"></script>
+<script>document.getElementById("go").href = (window.TTS_CONFIG || {}).viewer || "#";</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+torch>=2.4
+einops
+numpy
+safetensors
+huggingface_hub
+matplotlib

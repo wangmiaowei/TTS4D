@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+weights/
+*.npz
+*.pth
+*.safetensors
+.ipynb_checkpoints/

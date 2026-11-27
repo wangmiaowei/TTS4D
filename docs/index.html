@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TTS: A Test-Time Solver for Uncertainty-Aware 4D Novel View Synthesis</title>
+<meta name="description" content="A feed-forward 4D novel view synthesis model built on a closed-form test-time solver layer, with per-pixel uncertainty maps.">
+<meta property="og:title" content="A Test-Time Solver for Uncertainty-Aware 4D Novel View Synthesis">
+<meta property="og:description" content="Write all input tokens into one fast weight in closed form: order-invariant, ~2x faster to train than TTT, and uncertainty for free.">
+<meta property="og:image" content="static/img/teaser.jpg">
+<link rel="icon" href="static/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<!-- ======================= HERO ======================= -->
+<header class="hero">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-glow g1"></div><div class="hero-glow g2"></div>
+  <div class="hero-inner">
+    <div class="badge">Feed-forward 4D Novel View Synthesis &nbsp;·&nbsp; Uncertainty-Aware</div>
+    <h1>A <span class="grad">Test-Time Solver</span> for<br>Uncertainty-Aware 4D Novel View Synthesis</h1>
+    <div class="authors">
+      <a href="https://wangmiaowei.github.io/" target="_blank" rel="noopener">Miaowei Wang<sup>1</sup></a>
+      <a href="https://excitedbutter.github.io/" target="_blank" rel="noopener">Zhi Cao<sup>2</sup></a>
+      <a href="https://github.com/xjwxjw" target="_blank" rel="noopener">Jingwei Xu<sup>3</sup></a>
+      <a href="https://homepages.inf.ed.ac.uk/omacaod/" target="_blank" rel="noopener">Oisin Mac Aodha<sup>1</sup></a>
+      <a href="https://avaxman.github.io/" target="_blank" rel="noopener">Amir Vaxman<sup>1</sup></a>
+    </div>
+    <div class="affils">
+      <span><sup>1</sup>University of Edinburgh</span>
+      <span><sup>2</sup>Stanford University</span>
+      <span><sup>3</sup>NovaCore</span>
+    </div>
+    <nav class="links">
+      <a class="btn" id="lnk-paper" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2"/></svg>Paper</a>
+      <a class="btn" id="lnk-arxiv" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><text x="2" y="17" font-size="13" font-family="Inter" font-weight="800" fill="currentColor">ar</text><text x="14" y="17" font-size="13" font-family="Inter" font-weight="800" fill="currentColor">X</text></svg>arXiv</a>
+      <a class="btn" id="lnk-code" href="https://github.com/wangmiaowei/TTS4D" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>Code</a>
+      <a class="btn" id="lnk-hf" href="https://huggingface.co/miaoweiwang/TTS4D" target="_blank" rel="noopener"><span class="emoji">🤗</span>Weights</a>
+      <a class="btn" id="lnk-video" href="#video"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15.1V8.9l5.8 3.1z"/></svg>Video</a>
+      <a class="btn" id="lnk-slides" href="static/slides/TTS_talk.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 17v4M8 21h8" stroke="currentColor" stroke-width="2"/></svg>Slides</a>
+      <a class="btn btn-accent" id="lnk-demo" href="demo.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M10 8l6 4-6 4z"/></svg>Live Demo</a>
+    </nav>
+    <div class="scroll-hint" aria-hidden="true">scroll</div>
+  </div>
+</header>
+
+<main>
+
+<!-- ======================= TEASER ======================= -->
+<section class="section teaser" id="teaser">
+  <div class="container">
+    <div class="tldr">
+      <span class="tag">TL;DR</span>
+      Instead of updating fast weights with <em>one gradient step per chunk</em> like test-time training, our
+      <b>Test-Time Solver (TTS)</b> writes <b>all</b> input tokens into a single fast weight <b>in closed form</b>.
+      The memory is order-invariant, has a fixed size, trains ~2&times; faster, keeps reads sharp as the number of views and the
+      resolution grow, and its Bayesian posterior gives an <b>uncertainty map for free</b>.
+    </div>
+    <figure class="card fig">
+      <img src="static/img/teaser.jpg" alt="Teaser: 16 posed inputs, novel space-time orbit, FSM vs ours, uncertainty, robustness plots" loading="lazy">
+      <figcaption>16 posed images in, a 4D free-viewpoint video out at 512&times;512 and 22&nbsp;FPS on one GPU. FSM blurs the moving car;
+        ours keeps it sharp and outputs an uncertainty map that follows the error, and stays robust as views and resolution grow.</figcaption>
+    </figure>
+    <div class="stats">
+      <div class="stat"><div class="num" data-count="2">0</div><div class="lbl">&times; faster training than TTT</div></div>
+      <div class="stat"><div class="num" data-count="12.5" data-dec="1">0</div><div class="lbl">dB gain at 128 views (ablation)</div></div>
+      <div class="stat"><div class="num" data-count="22">0</div><div class="lbl">FPS at 512&sup2; on one GPU</div></div>
+      <div class="stat"><div class="num" data-count="40">0</div><div class="lbl">public training sources</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= VIDEO ======================= -->
+<section class="section" id="video">
+  <div class="container">
+    <h2 class="section-title"><span>01</span>Overview video</h2>
+    <div class="video-embed card" id="yt-wrap" data-yt="">
+      <div class="yt-placeholder">
+        <p>Narrated video (3:50) with all comparisons.</p>
+        <p class="muted">YouTube link coming soon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ABSTRACT ======================= -->
+<section class="section alt" id="abstract">
+  <div class="container narrow">
+    <h2 class="section-title"><span>02</span>Abstract</h2>
+    <p class="abstract">
+      4D novel view synthesis (NVS) methods require many input frames to faithfully reconstruct long, complex, and dynamic scenes.
+      However, current Transformer-based methods are bottlenecked by the quadratic scaling of softmax attention. Test-time training (TTT)
+      attempts to address this limitation by compressing tokens into fast weights at linear cost, but introduces a dependency on token order
+      that can affect performance, as well as the need for gradient-based optimization at inference time. We propose a novel Test-time solver
+      (TTS) layer that solves the same fitting via a closed-form expression, resulting in an order-invariant approach that trains nearly
+      2&times; faster than comparable TTT models. Our TTS solution also naturally allows us to represent uncertainty in the model's predictions,
+      a desirable capability given that NVS is highly under-constrained as parts of a scene may not be visible in the input images. By combining
+      an epistemic term from our solver's posterior with a learned aleatoric term, we can generate an uncertainty map in a feed-forward manner.
+      Our approach sets a new state of the art on multiple 4D NVS benchmarks across different scene types, image resolutions, and numbers of
+      input views. In addition, our uncertainty maps correlate with parts of the image where the model's predictions are inaccurate, providing
+      an important step toward reliable 4D NVS.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= METHOD ======================= -->
+<section class="section" id="method">
+  <div class="container">
+    <h2 class="section-title"><span>03</span>Method</h2>
+    <div class="steps">
+      <div class="step card"><div class="step-n">1</div><h3>Attention does not scale</h3>
+        <p>Softmax attention compares every pair of tokens: 64 views at 512&sup2; already give 262K tokens.</p></div>
+      <div class="step card"><div class="step-n">2</div><h3>TTT: one step per chunk</h3>
+        <p>Test-time training writes tokens into fast weights with one gradient step per chunk. Reads return a blend of all values, and the memory depends on the order.</p></div>
+      <div class="step card hl"><div class="step-n">3</div><h3>TTS: solve, don't step</h3>
+        <p>We keep one linear fast weight and solve the ridge fit in closed form from five weighted sums: exact, order-invariant, fixed size.</p></div>
+    </div>
+    <figure class="card fig">
+      <img src="static/img/overview.jpg" alt="Model overview" loading="lazy">
+      <figcaption>Views exchange information only through our TTS layers, which accumulate all input tokens into weighted sums of fixed size
+        and solve for the fast weight W<sub>2</sub> in closed form. The solver's posterior gives the epistemic map; a small head adds the aleatoric part.</figcaption>
+    </figure>
+
+    <div class="eq card">
+      <div class="eq-row"><span class="eq-lbl">Write (ridge fit)</span>
+        <span class="math">L<sub>TTS</sub> = &Sigma;<sub>n</sub> a<sub>n</sub>&#8214;W<sub>2</sub>&psi;&#771;<sub>n</sub> &minus; v&#771;<sub>n</sub>&#8214;&sup2; + &lambda;&#8214;W<sub>2</sub> &minus; W<sub>2</sub><sup>init</sup>&#8214;<sub>F</sub>&sup2;</span></div>
+      <div class="eq-row"><span class="eq-lbl">Closed-form solve</span>
+        <span class="math">W<sub>2</sub><sup>&#8902;</sup> = (C&#771; + &lambda;W<sub>2</sub><sup>init</sup>)(G&#771; + &lambda;I)<sup>&minus;1</sup></span></div>
+      <div class="eq-row"><span class="eq-lbl">Uncertainty of a read</span>
+        <span class="math">Var[o<sub>m</sub>] = &sigma;&sup2; &psi;&#771;<sub>m</sub><sup>&#8868;</sup>P<sup>&minus;1</sup>&psi;&#771;<sub>m</sub></span></div>
+      <p class="muted small">Gaussian noise + Gaussian prior &rArr; minimizing L<sub>TTS</sub> is the MAP estimate, and the posterior covariance of W<sub>2</sub> is &sigma;&sup2;P<sup>&minus;1</sup>.</p>
+    </div>
+
+    <div class="two">
+      <figure class="card fig">
+        <img src="static/img/interference.png" alt="Recall error vs number of views, TTT vs TTS" loading="lazy">
+        <figcaption><b>Write interference.</b> Write N views, read the written keys back. One gradient step per chunk recovers almost nothing (0.92&ndash;0.96);
+          the solve keeps what it writes (0.58&ndash;0.68) from 4 to 128 views.</figcaption>
+      </figure>
+      <figure class="card fig">
+        <img src="static/img/readweights.jpg" alt="Relative read weights FSM vs TTS" loading="lazy">
+        <figcaption><b>Where does each read come from?</b> FSM (TTT) spreads every read over all tokens; TTS returns mainly each token and its spatial
+          neighbors (diagonal bands). Geometric mean over 24 layers, 32 input views.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= COMPARISONS ======================= -->
+<section class="section alt" id="compare">
+  <div class="container wide">
+    <h2 class="section-title"><span>04</span>Interactive comparisons</h2>
+    <p class="lead">Pick a scene, then pick a baseline. Every method gets exactly the same posed inputs and renders the same novel space-time camera path.
+      Videos load only when you select them.</p>
+
+    <div class="filters" id="ds-filters"></div>
+    <div class="cases" id="case-grid"></div>
+    <div class="more-wrap"><button class="btn-more" id="btn-more">More cases <span id="more-count"></span></button></div>
+
+    <div class="viewer card" id="viewer">
+      <div class="viewer-head">
+        <div>
+          <div class="viewer-title" id="v-title">Select a scene above</div>
+          <div class="viewer-sub" id="v-sub"></div>
+        </div>
+        <div class="mode-toggle" role="tablist">
+          <button class="active" data-mode="side">Side by side</button>
+          <button data-mode="swipe">Swipe</button>
+        </div>
+      </div>
+
+      <div class="method-bar" id="method-bar"></div>
+
+      <div class="stage" id="stage">
+        <div class="pane-row top">
+          <div class="pane"><div class="pane-lbl">Input (nearest in time)</div><video muted playsinline loop preload="none" data-role="input"></video></div>
+          <div class="pane"><div class="pane-lbl">Novel camera path (top view)</div><video muted playsinline loop preload="none" data-role="camera"></video></div>
+          <div class="pane"><div class="pane-lbl">Ours: uncertainty</div><video muted playsinline loop preload="none" data-role="unc"></video>
+            <div class="cbar"><span>certain</span><i></i><span>uncertain</span></div></div>
+        </div>
+        <div class="pane-row main side" id="main-side">
+          <div class="pane big"><div class="pane-lbl ours">Ours</div><video muted playsinline loop preload="none" data-role="ours"></video></div>
+          <div class="pane big"><div class="pane-lbl" id="bl-lbl">Baseline</div><video muted playsinline loop preload="none" data-role="base"></video></div>
+        </div>
+        <div class="swipe-wrap" id="main-swipe" hidden>
+          <video muted playsinline loop preload="none" data-role="swipe-base"></video>
+          <div class="swipe-top" id="swipe-top"><video muted playsinline loop preload="none" data-role="swipe-ours"></video></div>
+          <div class="swipe-handle" id="swipe-handle"><span></span></div>
+          <div class="pane-lbl ours sl">Ours</div><div class="pane-lbl sr" id="swipe-bl-lbl">Baseline</div>
+        </div>
+        <div class="controls">
+          <button id="btn-play" class="ctl">❚❚</button>
+          <input type="range" id="seek" min="0" max="1000" value="0">
+          <select id="speed" class="ctl"><option value="0.5">0.5&times;</option><option value="1" selected>1&times;</option></select>
+        </div>
+      </div>
+      <p class="muted small">&dagger; C4G takes no cameras; we align its poses at test time. Uncertainty colors: log-variance, blue = certain, red = uncertain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ROBUSTNESS ======================= -->
+<section class="section" id="robust">
+  <div class="container wide">
+    <h2 class="section-title"><span>05</span>Robustness</h2>
+    <div class="two">
+      <div class="card rob">
+        <h3>More input views</h3>
+        <p class="muted small">Stereo4D, 512&times;512. TTT interference accumulates with more views; the solve does not.</p>
+        <div class="seg" id="seg-views">
+          <button data-v="8">8</button><button data-v="16">16</button><button data-v="32">32</button><button data-v="64" class="active">64</button>
+        </div>
+        <div class="pair">
+          <div class="pane"><div class="pane-lbl">FSM</div><video muted playsinline loop preload="none" id="rv-fsm"></video></div>
+          <div class="pane"><div class="pane-lbl ours">Ours</div><video muted playsinline loop preload="none" id="rv-ours"></video></div>
+        </div>
+        <button class="btn-load" data-load="views">&#9654; Load videos</button>
+      </div>
+      <div class="card rob">
+        <h3>Higher resolution</h3>
+        <p class="muted small">Stereo4D, 16 input views. Doubling the resolution gives 4&times; the tokens per view.</p>
+        <div class="seg" id="seg-res">
+          <button data-r="256">256&sup2;</button><button data-r="384">384&sup2;</button><button data-r="512" class="active">512&sup2;</button>
+        </div>
+        <div class="pair">
+          <div class="pane"><div class="pane-lbl">FSM <span class="psnr" id="rr-fsm-p"></span></div><video muted playsinline loop preload="none" id="rr-fsm"></video></div>
+          <div class="pane"><div class="pane-lbl ours">Ours <span class="psnr" id="rr-ours-p"></span></div><video muted playsinline loop preload="none" id="rr-ours"></video></div>
+        </div>
+        <button class="btn-load" data-load="res">&#9654; Load videos</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= RESULTS ======================= -->
+<section class="section alt" id="results">
+  <div class="container wide">
+    <h2 class="section-title"><span>06</span>Results</h2>
+    <figure class="card fig">
+      <img src="static/img/sota_views.png" alt="PSNR vs number of input views on Stereo4D, DyCheck and NVIDIA" loading="lazy">
+      <figcaption>State of the art on three 4D benchmarks against six recent feed-forward methods (DyCheck and NVIDIA are out of domain).</figcaption>
+    </figure>
+    <div class="two">
+      <figure class="card fig">
+        <img src="static/img/speed_mem_psnr.png" alt="Memory, speed and PSNR ablation" loading="lazy">
+        <figcaption><b>Controlled ablation</b> (same backbone, same training). One linear fast weight solved exactly beats a nonlinear MLP memory
+          updated by gradient steps, while using less memory and half the training time.</figcaption>
+      </figure>
+      <div class="card quote">
+        <p>&ldquo;Accurately writing tokens into memory matters as much as designing a more complex memory.&rdquo;</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= UNCERTAINTY ======================= -->
+<section class="section" id="uncertainty">
+  <div class="container wide">
+    <h2 class="section-title"><span>07</span>Uncertainty</h2>
+    <div class="two">
+      <div>
+        <div class="card text">
+          <h3>Epistemic: from the solver's posterior</h3>
+          <p>The write is a Bayesian linear regression; the solve is its MAP estimate. A read's posterior variance is large where no input
+            supports it &mdash; hidden surfaces, regions outside all views, or times far from all inputs &mdash; and costs one triangular product.</p>
+          <h3>Aleatoric: learned</h3>
+          <p>A small head predicts what the inputs cannot explain: fine texture, reflections, fast motion. The two are nearly uncorrelated,
+            and their sum tracks the error best at every number of views.</p>
+        </div>
+      </div>
+      <figure class="card fig">
+        <img src="static/img/unc_maps.jpg" alt="Epistemic, aleatoric and combined uncertainty" loading="lazy">
+        <figcaption>4 input views: the epistemic map is smooth and coarse, the aleatoric map detailed; their sum follows the error best.</figcaption>
+      </figure>
+    </div>
+    <div class="card avs">
+      <h3>Application: active view selection</h3>
+      <p class="muted small">Mip-NeRF 360 bonsai, 4 &rarr; 20 views. Our uncertainty picks the next camera; it beats random selection on held-out views.</p>
+      <div class="avs-grid">
+        <div class="pane"><div class="pane-lbl ours">Cameras chosen by our uncertainty</div><video muted playsinline loop preload="none" data-src="avs/cams_active.mp4"></video></div>
+        <div class="pane"><div class="pane-lbl">Random cameras</div><video muted playsinline loop preload="none" data-src="avs/cams_random.mp4"></video></div>
+        <div class="pane"><div class="pane-lbl ours">Held-out view (ours)</div><video muted playsinline loop preload="none" data-src="avs/viewA_active.mp4"></video></div>
+        <div class="pane"><div class="pane-lbl">Held-out view (random)</div><video muted playsinline loop preload="none" data-src="avs/viewA_random.mp4"></video></div>
+      </div>
+      <button class="btn-load" data-load="avs">&#9654; Load videos</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= DEMO ======================= -->
+<section class="section demo-sec" id="demo">
+  <div class="container">
+    <div class="demo-card">
+      <div>
+        <h2>Try it live</h2>
+        <p>Fly through dynamic and static scenes in your browser: move the camera, scrub time, change the number of input views, and inspect the uncertainty.
+          Rendered on a single cloud GPU and streamed to you.</p>
+      </div>
+      <a class="btn btn-accent big" href="demo.html" target="_blank" rel="noopener">Open the viewer &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= BIBTEX ======================= -->
+<section class="section alt" id="bibtex">
+  <div class="container narrow">
+    <h2 class="section-title"><span>08</span>BibTeX</h2>
+    <div class="bib card">
+      <button class="copy" id="copy-bib">Copy</button>
+<pre id="bib-text">@article{wang2026tts,
+  title   = {A Test-Time Solver for Uncertainty-Aware 4D Novel View Synthesis},
+  author  = {Wang, Miaowei and Cao, Zhi and Xu, Jingwei and Mac Aodha, Oisin and Vaxman, Amir},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
+</footer>
+
+<script src="static/js/config.js"></script>
+<script src="static/js/cases.js"></script>
+<script src="static/js/main.js"></script>
+</body>
+</html>
