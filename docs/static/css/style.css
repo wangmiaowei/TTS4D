@@ -221,6 +221,8 @@ sup { font-size: .62em; }
 .inline-fig { width: 100%; border-radius: 10px; margin: -4px 0 20px; background: #fff; }
 .avs { padding: 20px; margin-top: 24px; }
 .avs h3 { margin: 0 0 4px; }
+.math-line { font: italic 400 19px/1.4 "Source Serif 4", Georgia, serif; text-align: center; margin: -6px 0 14px;
+  padding: 8px; background: var(--bg-alt); border-radius: 8px; color: var(--ink); }
 .avs-text { color: var(--ink-2); font-size: 15px; margin: 6px 0 6px; }
 .avs .muted.small { margin: 0 0 4px; }
 .avs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
