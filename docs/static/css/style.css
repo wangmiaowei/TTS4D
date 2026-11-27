@@ -201,6 +201,8 @@ sup { font-size: .62em; }
 #uncertainty .two > div > .card { height: 100%; box-sizing: border-box; }
 /* labels below the video (these videos carry their own burnt-in text in the top-left corner) */
 .avs-grid .pane, .rob .pair .pane { aspect-ratio: auto; background: none; overflow: visible; display: flex; flex-direction: column-reverse; gap: 6px; }
+.avs-grid .pane, .rob .pair .pane { min-width: 0; }
+.avs-grid .pane video, .rob .pair .pane video { width: 100%; height: auto; min-width: 0; }
 .avs-grid .pane video { aspect-ratio: 4/3; border-radius: 10px; background: #05070d; }
 .rob .pair .pane video { aspect-ratio: 1/1; border-radius: 10px; background: #05070d; }
 .avs-grid .pane-lbl, .rob .pair .pane-lbl { position: static; align-self: flex-start; backdrop-filter: none; font-size: 12.5px; }
