@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127114658">
+<link rel="stylesheet" href="static/css/style.css?v=20261127114800">
 </head>
 <body>
 
@@ -267,16 +267,17 @@
 <section class="section alt" id="results">
   <div class="container">
     <h2 class="section-title"><span>06</span>Results</h2>
-    <figure class="card fig">
-      <img src="static/img/sota_views.png" alt="PSNR vs number of input views on Stereo4D, DyCheck and NVIDIA" loading="lazy">
-      <figcaption>State of the art on three 4D benchmarks against six recent feed-forward methods (DyCheck and NVIDIA are out of domain).</figcaption>
-    </figure>
-    <figure class="card fig">
-      <img src="static/img/speed_mem_psnr.png" alt="Memory, speed and PSNR ablation" loading="lazy">
-      <figcaption><b>Controlled ablation</b> (Stereo4D 128&sup2;, same backbone, same training, trained on 32 views). One linear fast weight solved exactly
-        beats a nonlinear SwiGLU memory updated by gradient steps (FSM-style) and a solver without our centering and prior (MesaNet-style), while using
-        less memory and about half the training time; the FSM-style memory peaks at its training setting and then degrades as interference accumulates.</figcaption>
-    </figure>
+    <div class="two res">
+      <figure class="card fig">
+        <img src="static/img/sota_views.png" alt="PSNR vs number of input views on Stereo4D, DyCheck and NVIDIA" loading="lazy">
+        <figcaption><b>State of the art</b> on three 4D benchmarks against six recent feed-forward methods (DyCheck and NVIDIA are out of domain).</figcaption>
+      </figure>
+      <figure class="card fig">
+        <img src="static/img/speed_mem_psnr.png" alt="Memory, speed and PSNR ablation" loading="lazy">
+        <figcaption><b>Controlled ablation</b> (Stereo4D 128&sup2;, same backbone and training, trained on 32 views): one linear fast weight solved exactly
+          beats an MLP memory updated by gradient steps (FSM-style) and a solver without centering and prior (MesaNet-style), with less memory and half the training time.</figcaption>
+      </figure>
+    </div>
     <div class="quote-band"><p>&ldquo;Accurately writing tokens into memory matters as much as designing a more complex memory.&rdquo;</p></div>
   </div>
 </section>
@@ -296,6 +297,8 @@
         <p>A small head on the <b>detached</b> query token predicts what covered inputs still cannot explain (fine texture, reflections, fast motion).
           Both are trained with a Gaussian NLL of the pixel error:</p>
         <div class="math-line">\(U=\mathrm{sg}[U_{\mathrm{epi}}]+U_{\mathrm{ale}},\quad L_{\mathrm{unc}}=\mathrm{NLL}(U)+\mathrm{NLL}(U_{\mathrm{epi}})\)</div>
+        <p class="small muted">The stop-gradient lets the first term train only the aleatoric head and the second only the epistemic fusion weights,
+          so \(U_{\mathrm{ale}}\) learns exactly what \(U_{\mathrm{epi}}\) misses. Cost: 0.2&nbsp;dB.</p>
       </div>
       <figure class="card fig">
         <img src="static/img/unc_maps.jpg" alt="Epistemic, aleatoric and combined uncertainty" loading="lazy">
@@ -366,8 +369,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127114658"></script>
-<script src="static/js/cases.js?v=20261127114658"></script>
-<script src="static/js/main.js?v=20261127114658"></script>
+<script src="static/js/config.js?v=20261127114800"></script>
+<script src="static/js/cases.js?v=20261127114800"></script>
+<script src="static/js/main.js?v=20261127114800"></script>
 </body>
 </html>

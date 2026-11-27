@@ -367,3 +367,9 @@ sup { font-size: .62em; }
 .two.unc .tbl { margin-top: 8px; font-size: 12.5px; }
 .two.unc .tbl th, .two.unc .tbl td { padding: 3px 6px; }
 #uncertainty .avs { margin-top: 16px; }
+
+/* results: the two charts side by side, images aligned at the top, captions aligned below */
+.two.res { margin-top: 0; align-items: stretch; }
+.two.res .fig { display: flex; flex-direction: column; padding: 14px; }
+.two.res .fig img { height: 230px; width: 100%; object-fit: contain; }
+.two.res .fig figcaption { font-size: 13.5px; }
