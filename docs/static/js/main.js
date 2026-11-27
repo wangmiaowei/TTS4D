@@ -17,7 +17,7 @@
   if (C.youtubeId) {
     const w = $("#yt-wrap");
     w.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + C.youtubeId +
-      '?rel=0" title="Overview video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>';
+      '?rel=0" title="Results video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>';
   }
 
   /* ---------- hero canvas: tokens flowing into a fixed-size memory ---------- */
