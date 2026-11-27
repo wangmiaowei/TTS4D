@@ -13,10 +13,16 @@
     if (url) a.href = url; else { a.classList.add("disabled"); a.title = "coming soon"; }
   }
   setLink("lnk-paper", C.arxiv);
-  if (C.youtubeId) {
+  {
     const w = $("#yt-wrap");
-    w.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + C.youtubeId +
-      '?rel=0" title="Results video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>';
+    if (C.youtubeId) {
+      w.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + C.youtubeId +
+        '?rel=0" title="Results video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>';
+    } else {
+      // self-hosted: the narrated results video streamed from the media repository (metadata only until play)
+      w.innerHTML = '<video controls playsinline preload="none" poster="' + media("video/poster.jpg") + '" src="' +
+        media("video/results.mp4") + '"></video>';
+    }
   }
 
   /* ---------- hero canvas: tokens flowing into a fixed-size memory ---------- */
