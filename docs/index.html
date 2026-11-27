@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127113950">
+<link rel="stylesheet" href="static/css/style.css?v=20261127114059">
 </head>
 <body>
 
@@ -294,7 +294,7 @@
           <img class="inline-fig" src="static/img/bayes_1d.png" alt="1D Bayesian linear regression: narrow band near written tokens, wide band away from them" loading="lazy">
           <h3>Aleatoric: learned</h3>
           <p>Even where the inputs cover a region, the model can still render it badly: fine texture, reflections, fast motion. A small head reads
-            each final query token <b>detached</b> (stop-gradient, so it never changes the rendering) and predicts a per-pixel log-variance\n            \(U_{\mathrm{ale}}\). The total is</p>
+            each final query token <b>detached</b> (stop-gradient, so it never changes the rendering) and predicts a per-pixel log-variance \(U_{\mathrm{ale}}\). The total is</p>
           <div class="math-line">\(U=\mathrm{sg}[U_{\mathrm{epi}}]+U_{\mathrm{ale}}\)</div>
           <p>Both maps are trained with a Gaussian negative log-likelihood of the (detached) per-pixel error \(e_s\),
             \(\mathrm{NLL}(V)=\tfrac12\sum_s\big(e_s^2\,e^{-V_s}+V_s\big)\), minimized when the predicted variance equals the squared error:</p>
@@ -378,8 +378,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127113950"></script>
-<script src="static/js/cases.js?v=20261127113950"></script>
-<script src="static/js/main.js?v=20261127113950"></script>
+<script src="static/js/config.js?v=20261127114059"></script>
+<script src="static/js/cases.js?v=20261127114059"></script>
+<script src="static/js/main.js?v=20261127114059"></script>
 </body>
 </html>

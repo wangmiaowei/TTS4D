@@ -117,7 +117,7 @@ sup { font-size: .62em; }
 .eq-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; padding: 8px 0; border-bottom: 1px dashed var(--line); }
 .eq-row:last-of-type { border-bottom: 0; }
 .eq-lbl { width: 190px; font-weight: 600; font-size: 14px; color: var(--muted); }
-.math { font-size: 17px; min-width: 0; overflow-x: auto; }
+.math { font-size: 17px; min-width: 0; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 4px 0; scrollbar-width: none; }
 .math .katex { font-size: 1.12em; }
 
 /* comparisons */
@@ -340,3 +340,5 @@ sup { font-size: .62em; }
 .text .katex { font-size: 1.02em; }
 /* teaser and method figures: keep large figures from getting taller than the screen */
 .fig img { max-height: 78vh; object-fit: contain; }
+
+.container > .fig + .fig, .container > .fig + .two, .container > .two + .fig { margin-top: 22px; }
