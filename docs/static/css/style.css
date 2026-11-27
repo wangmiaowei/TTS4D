@@ -377,3 +377,22 @@ sup { font-size: .62em; }
 .epi-plot { float: right; width: 44%; margin: 0 0 6px 14px; border-radius: 8px; background: #fff; border: 1px solid var(--line); }
 .two.unc .text h3:not(:first-child) { clear: both; }
 @media (max-width: 860px) { .epi-plot { float: none; width: 100%; margin: 0 0 8px; } }
+
+/* method: calmer proportions */
+#method .steps { gap: 14px; margin-bottom: 18px; }
+#method .step { padding: 14px 16px; }
+#method .step h3 { font-size: 15.5px; margin: 4px 0 2px; }
+#method .step p { font-size: 13.5px; line-height: 1.55; }
+#method .step-n { width: 24px; height: 24px; font-size: 13px; }
+#method > .container > .fig { padding: 14px 18px; }
+#method > .container > .fig img { max-height: 330px; width: auto; max-width: 100%; margin: 0 auto; }
+#method > .container > .fig figcaption { font-size: 13.5px; text-align: center; }
+#method .eq { padding: 12px 20px; margin-top: 18px; }
+#method .eq-row { padding: 4px 0; }
+#method .eq-lbl { width: 170px; font-size: 13px; }
+#method .math { font-size: 15px; }
+#method .eq .muted.small { margin: 6px 0 0; font-size: 12.5px; }
+#method .two { margin-top: 18px; }
+#method .two > .fig { padding: 14px; }
+#method .two > .fig img { height: 250px; width: 100%; object-fit: contain; flex: 0 0 auto; }
+#method .two > .fig figcaption { font-size: 13px; }
