@@ -297,6 +297,8 @@ sup { font-size: .62em; }
 .stage .band.narrow .pair { flex-wrap: nowrap; }
 .pane-lbl.method { background: var(--warm); }
 .stage .pane-lbl { font-size: 11.5px; padding: 3px 7px; top: 6px; left: 6px; }
+.stage .pane-lbl.sr { left: auto; right: 6px; }
+.stage .band .swipe-wrap { width: var(--sww, 860px); height: var(--swh, 240px); }
 .stage .cbar { font-size: 9.5px; }
 .stage .cbar i { width: 52px; }
 .stage .controls { margin-top: 8px; }
