@@ -48,6 +48,18 @@
   </div>
 </header>
 
+<nav class="topnav" id="topnav" aria-label="sections">
+  <a class="brand" href="#">TTS</a>
+  <div class="tn-links">
+    <a href="#video">Video</a><a href="#method">Method</a><a href="#compare">Comparisons</a><a href="#robust">Robustness</a>
+    <a href="#results">Results</a><a href="#uncertainty">Uncertainty</a><a href="#demo">Demo</a><a href="#bibtex">BibTeX</a>
+  </div>
+  <div class="tn-ext">
+    <a href="https://github.com/wangmiaowei/TTS4D" target="_blank" rel="noopener">Code</a>
+    <a href="https://huggingface.co/miaoweiwang/TTS4D" target="_blank" rel="noopener">🤗</a>
+  </div>
+</nav>
+
 <main>
 
 <!-- ======================= TEASER ======================= -->
@@ -60,6 +72,15 @@
       The memory is order-invariant, has a fixed size, trains ~2&times; faster, keeps reads sharp as the number of views and the
       resolution grow, and its Bayesian posterior gives an <b>uncertainty map for free</b>.
     </div>
+    <div class="reel" id="reel">
+      <figure><video muted playsinline loop preload="none" data-src="cmp/nvidia__Jumping_fv4-dn/Ours.mp4" poster=""></video>
+        <figcaption><b>Jumping</b> · NVIDIA · 48 views</figcaption></figure>
+      <figure><video muted playsinline loop preload="none" data-src="cmp/diva360__penguin_fv4-cone-a35/Ours.mp4"></video>
+        <figcaption><b>Penguin</b> · DiVA-360 · 35&deg; off the rig</figcaption></figure>
+      <figure><video muted playsinline loop preload="none" data-src="cmp/cmu_panoptic__171204_pose6_fv4-st/Ours.mp4"></video>
+        <figcaption><b>Pose</b> · CMU Panoptic · space-time path</figcaption></figure>
+    </div>
+    <p class="reel-note">Our renderings along novel space-time camera paths (not the input cameras). Compare with six baselines <a href="#compare">below</a>.</p>
     <figure class="card fig">
       <img src="static/img/teaser.jpg" alt="Teaser: 16 posed inputs, novel space-time orbit, FSM vs ours, uncertainty, robustness plots" loading="lazy">
       <figcaption>16 posed images in, a 4D free-viewpoint video out at 512&times;512 and 22&nbsp;FPS on one GPU. FSM blurs the moving car;

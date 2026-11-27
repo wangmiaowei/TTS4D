@@ -168,6 +168,10 @@
     curCase = c;
     $$(".case", grid).forEach((d, i) => d.classList.toggle("active", false));
     renderGrid();
+    const st = $("#stage");
+    st.style.setProperty("--ar", c.ar || 16 / 9);
+    st.classList.toggle("sq", c.ar >= 0.95 && c.ar < 1.3);
+    st.classList.toggle("pt", c.ar < 0.95);
     $("#v-title").textContent = c.title;
     $("#v-sub").textContent = c.dataset + " · " + c.nin + " posed input views · novel space-time camera path";
     $$(".mbtn", bar).forEach((b) => { b.disabled = c.videos.indexOf(b.dataset.m) < 0; });
@@ -265,6 +269,30 @@
     resR = +b.dataset.r; $$("#seg-res button").forEach((x) => x.classList.toggle("active", x === b));
     if (robLoaded.res) loadRes();
   });
+
+  /* ---------- results reel: load and play only while visible ---------- */
+  const reelVids = $$("#reel video");
+  reelVids.forEach((v) => { v.poster = media(v.dataset.src.replace("Ours.mp4", "poster.jpg")); });
+  const reelIO = new IntersectionObserver((ents) => {
+    ents.forEach((e) => {
+      const v = e.target;
+      if (e.isIntersecting) { if (!v.getAttribute("src")) v.src = media(v.dataset.src); playAll([v]); }
+      else v.pause();
+    });
+  }, { threshold: 0.25 });
+  reelVids.forEach((v) => reelIO.observe(v));
+
+  /* ---------- sticky nav: show after the hero, highlight the current section ---------- */
+  const nav = $("#topnav"), hero = $(".hero");
+  new IntersectionObserver((e) => nav.classList.toggle("show", !e[0].isIntersecting), { threshold: 0.05 }).observe(hero);
+  const navLinks = $$(".tn-links a");
+  const secIO = new IntersectionObserver((ents) => {
+    ents.forEach((e) => {
+      if (!e.isIntersecting) return;
+      navLinks.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  $$("main section[id]").forEach((s) => secIO.observe(s));
 
   /* ---------- bibtex ---------- */
   $("#copy-bib").onclick = (e) => {

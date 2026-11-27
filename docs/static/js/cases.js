@@ -7,6 +7,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 64,
   "path": "space-time path",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -27,6 +28,7 @@ window.TTS_CASES = [
   "group": "DyCheck",
   "nin": 32,
   "path": "camera circle",
+  "ar": 0.75,
   "videos": [
    "4DGT",
    "C4G",
@@ -47,6 +49,7 @@ window.TTS_CASES = [
   "group": "NVIDIA",
   "nin": 48,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -67,6 +70,7 @@ window.TTS_CASES = [
   "group": "Multi-camera rigs",
   "nin": 64,
   "path": "space-time path",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -87,6 +91,7 @@ window.TTS_CASES = [
   "group": "Multi-camera rigs",
   "nin": 64,
   "path": "space-time path",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -107,6 +112,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -127,6 +133,7 @@ window.TTS_CASES = [
   "group": "DyCheck",
   "nin": 32,
   "path": "camera circle",
+  "ar": 0.75,
   "videos": [
    "4DGT",
    "C4G",
@@ -147,6 +154,7 @@ window.TTS_CASES = [
   "group": "DyCheck",
   "nin": 32,
   "path": "camera circle",
+  "ar": 0.75,
   "videos": [
    "4DGT",
    "C4G",
@@ -167,6 +175,7 @@ window.TTS_CASES = [
   "group": "In-the-wild video",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -187,6 +196,7 @@ window.TTS_CASES = [
   "group": "In-the-wild video",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -207,6 +217,7 @@ window.TTS_CASES = [
   "group": "Multi-camera rigs",
   "nin": 64,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -227,6 +238,7 @@ window.TTS_CASES = [
   "group": "Multi-camera rigs",
   "nin": 64,
   "path": "space-time path",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -247,6 +259,7 @@ window.TTS_CASES = [
   "group": "Multi-camera rigs",
   "nin": 64,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -267,6 +280,7 @@ window.TTS_CASES = [
   "group": "NVIDIA",
   "nin": 48,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -287,6 +301,7 @@ window.TTS_CASES = [
   "group": "NVIDIA",
   "nin": 48,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -307,6 +322,7 @@ window.TTS_CASES = [
   "group": "NVIDIA",
   "nin": 48,
   "path": "camera circle",
+  "ar": 1.7773,
   "videos": [
    "4DGT",
    "C4G",
@@ -327,6 +343,7 @@ window.TTS_CASES = [
   "group": "Robotics",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.7778,
   "videos": [
    "4DGT",
    "C4G",
@@ -347,6 +364,7 @@ window.TTS_CASES = [
   "group": "Robotics",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.7778,
   "videos": [
    "4DGT",
    "C4G",
@@ -367,6 +385,7 @@ window.TTS_CASES = [
   "group": "Robotics",
   "nin": 64,
   "path": "space-time path",
+  "ar": 1.7778,
   "videos": [
    "4DGT",
    "C4G",
@@ -387,6 +406,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -407,6 +427,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -427,6 +448,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -447,6 +469,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -467,6 +490,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -487,6 +511,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -507,6 +532,7 @@ window.TTS_CASES = [
   "group": "Stereo4D",
   "nin": 32,
   "path": "camera circle",
+  "ar": 1.0,
   "videos": [
    "4DGT",
    "C4G",
@@ -527,6 +553,7 @@ window.TTS_CASES = [
   "group": "Synthetic",
   "nin": 64,
   "path": "space-time path",
+  "ar": 1.5,
   "videos": [
    "4DGT",
    "C4G",
