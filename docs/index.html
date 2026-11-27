@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127115018">
+<link rel="stylesheet" href="static/css/style.css?v=20261127115104">
 </head>
 <body>
 
@@ -316,13 +316,9 @@
     </div>
     <div class="card avs">
       <h3>Application: active view selection</h3>
-      <p class="avs-text"><b>Which photo should be taken next?</b> We start from 4 input views of the Mip-NeRF 360 <i>bonsai</i> scene and add one
-        view at a time, up to 20. At every step our model renders all remaining candidate cameras in one forward pass and picks the one whose
-        <b>predicted uncertainty is highest</b>, i.e. the part of the scene the current inputs explain worst. No retraining or per-scene optimization is
-        needed. We compare against adding a random camera, and score both on 37 held-out views.</p>
-      <p class="muted small">Left: the cameras each strategy has chosen (green: ours, red: random; numbers = step). Right: the same held-out view rendered from
-        each set of inputs. At 20 views ours reaches <b>22.5 dB vs. 21.9 dB</b> for random selection (mean of 3 seeds), and is on par with a
-        farthest-camera heuristic (22.5 dB) without being told anything about camera geometry.</p>
+      <p class="avs-text">Which photo to take next? From 4 views of Mip-NeRF 360 <i>bonsai</i>, we repeatedly add the candidate camera with the
+        <b>highest predicted uncertainty</b> (one forward pass, no retraining), up to 20 views. On 37 held-out views this reaches
+        <b>22.5&nbsp;dB vs. 21.9&nbsp;dB</b> for random picks.</p>
       <div class="avs-grid">
         <div class="pane"><div class="pane-lbl ours">Cameras chosen by our uncertainty</div><video muted playsinline loop preload="none" data-src="avs/cams_active.mp4"></video></div>
         <div class="pane"><div class="pane-lbl">Random cameras</div><video muted playsinline loop preload="none" data-src="avs/cams_random.mp4"></video></div>
@@ -370,8 +366,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127115018"></script>
-<script src="static/js/cases.js?v=20261127115018"></script>
-<script src="static/js/main.js?v=20261127115018"></script>
+<script src="static/js/config.js?v=20261127115104"></script>
+<script src="static/js/cases.js?v=20261127115104"></script>
+<script src="static/js/main.js?v=20261127115104"></script>
 </body>
 </html>
