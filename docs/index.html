@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127115810">
+<link rel="stylesheet" href="static/css/style.css?v=20261127115927">
 </head>
 <body>
 
@@ -318,9 +318,9 @@
     </div>
     <div class="card avs">
       <h3>Application: active view selection</h3>
-      <p class="avs-text">Which photo to take next? From 4 views of Mip-NeRF 360 <i>bonsai</i>, we repeatedly add the candidate camera with the
-        <b>highest predicted uncertainty</b> (one forward pass, no retraining), up to 20 views. On 37 held-out views this reaches
-        <b>22.5&nbsp;dB vs. 21.9&nbsp;dB</b> for random picks.</p>
+      <p class="avs-text">Our uncertainty is useful for human inspection and for downstream machine perception. Here a machine uses it to decide
+        <b>which view to capture next</b>: starting from 4 views of Mip-NeRF 360 <i>bonsai</i>, it repeatedly adds the candidate camera with the highest
+        predicted uncertainty (one forward pass, no retraining), and we compare the renderings of held-out views against adding random cameras.</p>
       <div class="avs-grid">
         <div class="pane"><div class="pane-lbl ours">Cameras chosen by our uncertainty</div><video muted playsinline loop preload="none" data-src="avs/cams_active.mp4"></video></div>
         <div class="pane"><div class="pane-lbl">Random cameras</div><video muted playsinline loop preload="none" data-src="avs/cams_random.mp4"></video></div>
@@ -368,8 +368,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127115810"></script>
-<script src="static/js/cases.js?v=20261127115810"></script>
-<script src="static/js/main.js?v=20261127115810"></script>
+<script src="static/js/config.js?v=20261127115927"></script>
+<script src="static/js/cases.js?v=20261127115927"></script>
+<script src="static/js/main.js?v=20261127115927"></script>
 </body>
 </html>
