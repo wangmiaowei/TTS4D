@@ -284,11 +284,39 @@
     if (!a._g) a._g = new Group(b, [a]);
     playAll([a, b]);
   }
+  // the four AVS videos are one step-by-step animation: N=4 is shown for 0-3.2 s, then one step every 1.6 s up to N=20
+  const avsT = (n) => (n <= 4 ? 1.6 : (n - 3) * 1.6 + 0.8);
+  const avsN = (t) => Math.max(4, Math.min(20, t < 3.2 ? 4 : Math.floor((t - 3.2) / 1.6) + 5));
+  let avsPlaying = true;
   function loadAvs() {
     const vs = $$(".avs-grid video");
     vs.forEach((v) => setSrc(v, media(v.dataset.src)));
-    playAll(vs);
+    if (!vs[0]._g) vs[0]._g = new Group(vs[0], vs.slice(1));
+    if (avsPlaying) playAll(vs);
   }
+  (function avsSlider() {
+    const sl = $("#avs-n"), out = $("#avs-n-out"), btn = $("#avs-play");
+    if (!sl) return;
+    const vids = () => $$(".avs-grid video");
+    sl.addEventListener("input", () => {
+      avsPlaying = false; btn.innerHTML = "&#9654;";
+      const n = +sl.value; out.textContent = n;
+      if (!robLoaded.avs) { robLoaded.avs = true; loadAvs(); }
+      vids().forEach((v) => {
+        v.pause();
+        const go = () => { try { v.currentTime = avsT(n); } catch (e) {} };
+        if (v.readyState >= 1) go(); else v.addEventListener("loadedmetadata", go, { once: true });
+      });
+    });
+    btn.addEventListener("click", () => {
+      avsPlaying = !avsPlaying; btn.innerHTML = avsPlaying ? "&#10074;&#10074;" : "&#9654;";
+      if (avsPlaying) playAll(vids()); else vids().forEach((v) => v.pause());
+    });
+    setInterval(() => {                       // while playing, the slider follows the animation
+      const v = vids()[0];
+      if (avsPlaying && v && !v.paused && document.activeElement !== sl) { const n = avsN(v.currentTime); sl.value = n; out.textContent = n; }
+    }, 200);
+  })();
   const loaders = { views: loadViews, res: loadRes, avs: loadAvs };
   // load each block the first time it scrolls into view; pause it while it is off screen
   $$(".btn-load").forEach((b) => {
@@ -297,7 +325,7 @@
     new IntersectionObserver((ents) => {
       const vs = $$("video", card);
       if (ents[0].isIntersecting) {
-        if (!robLoaded[key]) { robLoaded[key] = true; loaders[key](); } else playAll(vs);
+        if (!robLoaded[key]) { robLoaded[key] = true; loaders[key](); } else if (key !== "avs" || avsPlaying) playAll(vs);
       } else vs.forEach((v) => v.pause());
     }, { threshold: 0.2 }).observe(card);
   });
