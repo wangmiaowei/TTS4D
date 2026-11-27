@@ -12,9 +12,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_CONFIG_PATH = os.path.join(HERE, "..", "configs", "tts4d.json")
 
 
-def load_model(ckpt_path, config_path=DEFAULT_CONFIG_PATH, device="cuda"):
-    """TTS4D with the released weights (a plain state_dict, EMA weights)."""
+def load_model(ckpt_path, config_path=DEFAULT_CONFIG_PATH, device="cuda", fast=None):
+    """TTS4D with the released weights (a plain state_dict, EMA weights).
+
+    fast: None (default) = the fast kernels under bf16 autocast on a GPU with Triton, True / False = force them on /
+    off (False = the PyTorch reference implementation); see ``TTS4D.set_fast``."""
     cfg = json.load(open(config_path))
+    cfg["fast"] = fast
     model = TTS4D(cfg)
     if str(ckpt_path).endswith(".safetensors"):
         from safetensors.torch import load_file
@@ -30,10 +34,10 @@ def load_model(ckpt_path, config_path=DEFAULT_CONFIG_PATH, device="cuda"):
 HF_REPO = "miaoweiwang/TTS4D"
 
 
-def from_pretrained(repo_id=HF_REPO, filename="tts4d.safetensors", device="cuda"):
+def from_pretrained(repo_id=HF_REPO, filename="tts4d.safetensors", device="cuda", fast=None):
     """Download the released weights from the Hugging Face Hub (cached) and build the model."""
     from huggingface_hub import hf_hub_download
-    return load_model(hf_hub_download(repo_id, filename), device=device)
+    return load_model(hf_hub_download(repo_id, filename), device=device, fast=fast)
 
 
 def load_scene(path):

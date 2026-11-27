@@ -4,3 +4,9 @@ numpy
 safetensors
 huggingface_hub
 matplotlib
+# evaluation, data preparation and applications (scripts/, tts4d/metrics.py, tts4d/data/)
+opencv-python
+scipy
+scikit-image
+lpips
+imageio[ffmpeg]

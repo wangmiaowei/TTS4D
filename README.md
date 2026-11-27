@@ -33,7 +33,7 @@ This repository contains the **inference code** and the released model weights (
 ```bash
 git clone https://github.com/wangmiaowei/TTS4D.git
 cd TTS4D
-pip install -r requirements.txt      # PyTorch >= 2.4 (for nn.RMSNorm), einops, numpy, safetensors, huggingface_hub
+pip install -r requirements.txt      # PyTorch >= 2.4; Triton (ships with PyTorch on Linux/CUDA) enables the fast kernels
 ```
 
 ## Quick start
@@ -58,12 +58,59 @@ same `tgt_*` arrays for held-out targets. `tts4d/geometry.py` (`normalize_scene`
 
 The model runs in bfloat16 autocast with the solve in float32; 32 views at 360&times;480 need about 9 GB of GPU memory.
 
+**Fast kernels.** On CUDA with Triton the TTS layers use our custom operators (`tts4d/kernels/`): a fused q/k projection,
+normalization and 2D-time RoPE, a bf16 feature map, the sufficient statistics with a hand-written backward, and the
+centring, scaling and solve with a **closed-form backward**. They are on by default; `load_model(..., fast=False)` selects
+the plain PyTorch reference implementation. Both paths are differentiable, so the layer can be fine-tuned. Without Triton
+everything falls back to PyTorch. On our tests the fast path renders the same images as the reference (48&ndash;53 dB
+PSNR between the two) and is about 1.3&times; faster with less memory; `tests/` contains the checks:
+
+```bash
+python tests/test_kernels.py                                   # each operator: forward vs. reference, backward vs. autograd
+python tests/verify_fast_path.py --weights weights/tts4d.safetensors --scene scene.npz   # whole model, fast vs. reference
+```
+
 ## Notebooks
 
 | notebook | what it shows |
 |---|---|
 | [`notebooks/fit_one_scene.ipynb`](notebooks/fit_one_scene.ipynb) | one dynamic scene (DyCheck *handwavy*, 32 views): solve once, render held-out views, uncertainty vs. error, order invariance, a novel camera path (executed, outputs included) |
 | [`notebooks/tts_vs_ttt_memory.ipynb`](notebooks/tts_vs_ttt_memory.ipynb) | **TTS vs. TTT** on the write operation alone, no weights or data needed: recall of written tokens as the number of views grows, sensitivity to the token order, where each read comes from, and the speed of a training step |
+
+## Evaluation, data and applications
+
+**1. Prepare a benchmark** (converts the raw data into scene `.npz` files with the input/target split of the paper):
+
+```bash
+python scripts/prepare_benchmark.py --benchmark dycheck --root /path/to/DyCheck --out data --n_in 16 32 64
+#   --benchmark: stereo4d, stereo4d_interp, dycheck, dycheck_novel, nvidia, nvidia_bullet, dl3dv, mip360, tandt
+```
+
+**2. Evaluate** (PSNR / SSIM / LPIPS and the uncertainty metrics, Pearson and AUSE for L1 and DSSIM, per number of views):
+
+```bash
+python scripts/eval_benchmark.py --data data/dycheck --out results/dycheck     # writes table.md / table.json
+```
+
+The metrics in `tts4d/metrics.py` follow each benchmark's protocol (masked metrics for DyCheck novel views, the NVIDIA
+protocol, the 3DGS protocol for Mip-NeRF 360 and Tanks and Temples, the GS-U protocol for AUSE).
+
+**3. Render a video** along a novel camera path, with the uncertainty next to it:
+
+```bash
+python scripts/render_video.py --scene data/dycheck/N32/apple.npz --out apple.mp4 --path bullet   # trajectory, bullet, orbit, orbit360, fixed
+```
+
+**4. Active view selection** (supplementary): start from 4 views of Mip-NeRF 360 *bonsai*, repeatedly add the candidate view
+with the highest predicted uncertainty, and score held-out views against random / farthest-camera selection:
+
+```bash
+python scripts/active_view_selection.py --root /path/to/mipnerf360 --out avs --n_start 4 --n_final 20
+```
+
+Notes: the released checkpoint is the one of the paper's 4D tables; the static-scene tables of the supplementary used a later
+checkpoint, so those numbers differ slightly. Stereo4D right-eye targets use a public perspective conversion of the right-eye
+videos (see `tts4d/data/stereo4d.py`).
 
 ## How the model works, in code
 
@@ -75,7 +122,14 @@ tts4d/
   rope.py        2-D + time rotary embedding of the TTS layer's q / k
   geometry.py    Plücker rays, scene normalisation (first input camera = identity, input-only scale)
   inference.py   model / scene loading, batched rendering, PSNR, training-free grid removal, uncertainty colouring
+  kernels/       fast operators: Triton kernels + closed-form backward passes (fused q/k + 2D-time RoPE, feature map,
+                 sufficient statistics, centred solve, q/k RMSNorm)
+  metrics.py     PSNR / SSIM / LPIPS per benchmark protocol, uncertainty Pearson and AUSE
+  runner.py      batched scene rendering used by the scripts
+  data/          benchmark converters (Stereo4D, DyCheck, NVIDIA, static scenes) to the scene format
 configs/tts4d.json   hyper-parameters of the released model
+scripts/        prepare_benchmark.py, eval_benchmark.py, render_video.py, active_view_selection.py, download_weights.py
+tests/          kernel and fast-path checks
 ```
 
 * `encode(inputs)` runs the input views through the network. In each of the 24 TTS layers the input tokens are written into
@@ -88,7 +142,7 @@ configs/tts4d.json   hyper-parameters of the released model
   `U_epi = beta_0 + sum_l beta_l log(u_l / u_bar_l)`; the total adds a learned aleatoric term, and `exp(U/2)` is the
   predicted standard deviation.
 
-Training code is not included.
+Training code and the interactive web viewer are not included; everything else used in the paper is.
 
 ## Citation
 

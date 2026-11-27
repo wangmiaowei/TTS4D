@@ -24,7 +24,8 @@ from .geometry import plucker_rays
 DEFAULT_CONFIG = dict(patch_size=8, dim=768, num_layers=24, attn_head_dim=64, max_time_seconds=30.0, rope_ref_grid=16,
                       tts=dict(head_dim=768, inter_multi=2, ridge_init=10.0, ridge_min=1e-3, base_evidence=1.0,
                                scale_eps=1e-3, rope_frequency=100.0),
-                      law_gamma=None, law_nref=32.0, aleatoric_hidden=768)
+                      law_gamma=None, law_nref=32.0, aleatoric_hidden=768,
+                      fast=None)   # None: fast kernels under bf16 autocast on a GPU with Triton; True / False: force
 
 
 class TTS4D(nn.Module):
@@ -37,7 +38,8 @@ class TTS4D(nn.Module):
         in_ch = 9 + 3 + 1                                       # Plucker (9) + RGB (3) + time (1) per pixel
         self.input_linear = nn.Linear(in_ch * p * p, dim, bias=False)
         self.input_layernorm = nn.LayerNorm(dim, bias=False)
-        self.blocks = nn.ModuleList([Layer(dim, cfg["attn_head_dim"], cfg["tts"]) for _ in range(cfg["num_layers"])])
+        self.blocks = nn.ModuleList([Layer(dim, cfg["attn_head_dim"], cfg["tts"], fast=cfg["fast"])
+                                     for _ in range(cfg["num_layers"])])
         if cfg.get("law_gamma"):
             for blk, g in zip(self.blocks, cfg["law_gamma"]):
                 blk.module_list[1]["f"].law_gamma, blk.module_list[1]["f"].law_nref = float(g), float(cfg["law_nref"])
@@ -53,6 +55,16 @@ class TTS4D(nn.Module):
         self.register_buffer("epi_u_scale", torch.ones(L))     # u_bar_l (running mean of u_l, recorded in training)
         self.register_buffer("log_sigma0_sq", torch.zeros(()))      # display reference of U
         self.register_buffer("log_sigma0_sq_epi", torch.zeros(()))  # display reference of U_epi
+
+    def set_fast(self, fast):
+        """Select the implementation of the TTS layers and of the attention q / k norm: True = the fast kernels
+        (``tts4d.kernels``), False = the PyTorch reference, None = automatic (fast under bf16 autocast on a GPU with
+        Triton).  Both compute the same function; see ``tests/verify_fast_path.py``."""
+        self.cfg["fast"] = fast
+        for blk in self.blocks:
+            blk.module_list[0]["f"].fast = fast
+            blk.module_list[1]["f"].fast = fast
+        return self
 
     # ------------------------------------------------------------------ tokens
     def tokens(self, views, with_image):
