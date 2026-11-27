@@ -222,7 +222,7 @@
     stage.style.setProperty("--sw", (2 * h * ar + gap) + "px");
     // swipe view: one frame with the video's own aspect ratio, as wide as the two side-by-side panes (taller if needed)
     const slotW = narrow ? W : 2 * h * ar + gap;
-    const swh = Math.min(slotW / ar, window.innerHeight * 0.62), sww = swh * ar;
+    const swh = Math.min(slotW / ar, window.innerHeight * 0.5), sww = swh * ar;
     stage.style.setProperty("--swh", swh + "px");
     stage.style.setProperty("--sww", sww + "px");
   }
