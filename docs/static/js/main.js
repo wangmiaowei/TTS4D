@@ -260,7 +260,17 @@
     playAll(vs);
   }
   const loaders = { views: loadViews, res: loadRes, avs: loadAvs };
-  $$(".btn-load").forEach((b) => b.onclick = () => { robLoaded[b.dataset.load] = true; b.classList.add("done"); loaders[b.dataset.load](); });
+  // load each block the first time it scrolls into view; pause it while it is off screen
+  $$(".btn-load").forEach((b) => {
+    const key = b.dataset.load, card = b.closest(".card");
+    b.classList.add("done");
+    new IntersectionObserver((ents) => {
+      const vs = $$("video", card);
+      if (ents[0].isIntersecting) {
+        if (!robLoaded[key]) { robLoaded[key] = true; loaders[key](); } else playAll(vs);
+      } else vs.forEach((v) => v.pause());
+    }, { threshold: 0.2 }).observe(card);
+  });
   $$("#seg-views button").forEach((b) => b.onclick = () => {
     viewsN = +b.dataset.v; $$("#seg-views button").forEach((x) => x.classList.toggle("active", x === b));
     if (robLoaded.views) loadViews();
