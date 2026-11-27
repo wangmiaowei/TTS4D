@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127115104">
+<link rel="stylesheet" href="static/css/style.css?v=20261127115425">
 </head>
 <body>
 
@@ -161,7 +161,7 @@
 
     <div class="two">
       <figure class="card fig">
-        <img src="static/img/interference.png" alt="Recall error vs number of views, TTT vs TTS" loading="lazy">
+        <img src="static/img/interference_web.png" alt="Recall error vs number of views, TTT vs TTS" loading="lazy">
         <figcaption><b>Write interference.</b> Write N views, read the written keys back. One gradient step per chunk recovers almost nothing (0.92&ndash;0.96);
           the solve keeps what it writes (0.58&ndash;0.68) from 4 to 128 views.</figcaption>
       </figure>
@@ -269,11 +269,11 @@
     <h2 class="section-title"><span>06</span>Results</h2>
     <div class="two res">
       <figure class="card fig">
-        <img src="static/img/sota_views.png" alt="PSNR vs number of input views on Stereo4D, DyCheck and NVIDIA" loading="lazy">
+        <img src="static/img/sota_views_web.png" alt="PSNR vs number of input views on Stereo4D, DyCheck and NVIDIA" loading="lazy">
         <figcaption><b>State of the art</b> on three 4D benchmarks against six recent feed-forward methods (DyCheck and NVIDIA are out of domain).</figcaption>
       </figure>
       <figure class="card fig">
-        <img src="static/img/speed_mem_psnr.png" alt="Memory, speed and PSNR ablation" loading="lazy">
+        <img src="static/img/speed_mem_psnr_web.png" alt="Memory, speed and PSNR ablation" loading="lazy">
         <figcaption><b>Controlled ablation</b> (Stereo4D 128&sup2;, same backbone and training, trained on 32 views): one linear fast weight solved exactly
           beats an MLP memory updated by gradient steps (FSM-style) and a solver without centering and prior (MesaNet-style), with less memory and half the training time.</figcaption>
       </figure>
@@ -289,17 +289,15 @@
     <div class="two unc">
       <div class="card text">
         <h3>Epistemic \(U_{\mathrm{epi}}\): from the solver's posterior</h3>
-        <img class="epi-plot" src="static/img/bayes_1d.png" alt="1D Bayesian linear regression: narrow band near written tokens, wide band away from them" loading="lazy">
         <p>The write is a Bayesian linear regression (Gaussian noise, Gaussian prior around \(W_2^{\mathrm{init}}\)): our solve is its MAP estimate,
           and a read has posterior variance</p>
         <div class="math-line">\(\mathrm{Var}[o_m]=\sigma^2u_m,\quad u_m=\tilde\psi_m^\top P^{-1}\tilde\psi_m\)</div>
         <p>large where no input covers the query: hidden surfaces, outside all views, far-away times. Fused over the 24 layers into \(U_{\mathrm{epi}}\).</p>
+        <img class="epi-plot" src="static/img/bayes_1d_web.png" alt="1D Bayesian linear regression: narrow band near the inputs, wide band and fallback to the prior away from them" loading="lazy">
         <h3>Aleatoric \(U_{\mathrm{ale}}\): learned</h3>
         <p>A small head on the <b>detached</b> query token predicts what covered inputs still cannot explain (fine texture, reflections, fast motion).
           Both are trained with a Gaussian NLL of the pixel error:</p>
         <div class="math-line">\(U=\mathrm{sg}[U_{\mathrm{epi}}]+U_{\mathrm{ale}},\quad L_{\mathrm{unc}}=\mathrm{NLL}(U)+\mathrm{NLL}(U_{\mathrm{epi}})\)</div>
-        <p class="small muted">The stop-gradient lets the first term train only the aleatoric head and the second only the epistemic fusion weights,
-          so \(U_{\mathrm{ale}}\) learns exactly what \(U_{\mathrm{epi}}\) misses. Cost: 0.2&nbsp;dB.</p>
       </div>
       <figure class="card fig">
         <img src="static/img/unc_maps.jpg" alt="Epistemic, aleatoric and combined uncertainty" loading="lazy">
@@ -312,6 +310,7 @@
             <tr class="hl"><td>Sum (ours)</td><td>0.430</td><td>0.531</td><td>0.575</td><td>0.594</td><td>0.602</td><td>0.603</td></tr>
           </tbody>
         </table>
+        <p class="tbl-note">Few views: missing coverage (epistemic) explains the error best; many views: hard content (aleatoric) takes over. Their sum wins everywhere.</p>
       </figure>
     </div>
     <div class="card avs">
@@ -366,8 +365,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127115104"></script>
-<script src="static/js/cases.js?v=20261127115104"></script>
-<script src="static/js/main.js?v=20261127115104"></script>
+<script src="static/js/config.js?v=20261127115425"></script>
+<script src="static/js/cases.js?v=20261127115425"></script>
+<script src="static/js/main.js?v=20261127115425"></script>
 </body>
 </html>

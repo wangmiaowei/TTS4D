@@ -371,10 +371,10 @@ sup { font-size: .62em; }
 /* results: the two charts side by side, images aligned at the top, captions aligned below */
 .two.res { margin-top: 0; align-items: stretch; }
 .two.res .fig { display: flex; flex-direction: column; padding: 14px; }
-.two.res .fig img { height: 230px; width: 100%; object-fit: contain; }
+.two.res .fig img { width: 100%; height: auto; }
 .two.res .fig figcaption { font-size: 13.5px; }
 
-.epi-plot { float: right; width: 44%; margin: 0 0 6px 14px; border-radius: 8px; background: #fff; border: 1px solid var(--line); }
+.epi-plot { display: block; width: 100%; margin: 2px 0 6px; border-radius: 8px; background: #fff; }
 .two.unc .text h3:not(:first-child) { clear: both; }
 @media (max-width: 860px) { .epi-plot { float: none; width: 100%; margin: 0 0 8px; } }
 
@@ -394,5 +394,7 @@ sup { font-size: .62em; }
 #method .eq .muted.small { margin: 6px 0 0; font-size: 12.5px; }
 #method .two { margin-top: 18px; }
 #method .two > .fig { padding: 14px; }
-#method .two > .fig img { height: 250px; width: 100%; object-fit: contain; flex: 0 0 auto; }
+#method .two > .fig img { height: 270px; width: 100%; object-fit: contain; flex: 0 0 auto; }
 #method .two > .fig figcaption { font-size: 13px; }
+
+@media (prefers-color-scheme: dark) { .epi-plot, .fig img { background: #fff; } }
