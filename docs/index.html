@@ -12,7 +12,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="static/css/style.css?v=20261127113653">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+<link rel="stylesheet" href="static/css/style.css?v=20261127113950">
 </head>
 <body>
 
@@ -147,12 +151,12 @@
 
     <div class="eq card">
       <div class="eq-row"><span class="eq-lbl">Write (ridge fit)</span>
-        <span class="math">L<sub>TTS</sub> = &Sigma;<sub>n</sub> a<sub>n</sub>&#8214;W<sub>2</sub>&psi;&#771;<sub>n</sub> &minus; v&#771;<sub>n</sub>&#8214;&sup2; + &lambda;&#8214;W<sub>2</sub> &minus; W<sub>2</sub><sup>init</sup>&#8214;<sub>F</sub>&sup2;</span></div>
+        <span class="math">\(\displaystyle L_{\mathrm{TTS}}=\sum_n a_n\,\lVert W_2\tilde\psi_n-\tilde v_n\rVert^2+\lambda\,\lVert W_2-W_2^{\mathrm{init}}\rVert_F^2\)</span></div>
       <div class="eq-row"><span class="eq-lbl">Closed-form solve</span>
-        <span class="math">W<sub>2</sub><sup>&#8902;</sup> = (C&#771; + &lambda;W<sub>2</sub><sup>init</sup>)(G&#771; + &lambda;I)<sup>&minus;1</sup></span></div>
+        <span class="math">\(W_2^\star=(\tilde C+\lambda W_2^{\mathrm{init}})\,(\tilde G+\lambda I)^{-1},\quad \tilde G=\sum_n a_n\tilde\psi_n\tilde\psi_n^\top,\ \ \tilde C=\sum_n a_n\tilde v_n\tilde\psi_n^\top\)</span></div>
       <div class="eq-row"><span class="eq-lbl">Uncertainty of a read</span>
-        <span class="math">Var[o<sub>m</sub>] = &sigma;&sup2; &psi;&#771;<sub>m</sub><sup>&#8868;</sup>P<sup>&minus;1</sup>&psi;&#771;<sub>m</sub></span></div>
-      <p class="muted small">Gaussian noise + Gaussian prior &rArr; minimizing L<sub>TTS</sub> is the MAP estimate, and the posterior covariance of W<sub>2</sub> is &sigma;&sup2;P<sup>&minus;1</sup>.</p>
+        <span class="math">\(\mathrm{Var}[o_m]=\sigma^2\,\tilde\psi_m^\top P^{-1}\tilde\psi_m,\qquad P=\tilde G+\lambda I\)</span></div>
+      <p class="muted small">Gaussian noise + Gaussian prior \(\Rightarrow\) minimizing \(L_{\mathrm{TTS}}\) is the MAP estimate, and the posterior covariance of each row of \(W_2\) is \(\sigma^2P^{-1}\).</p>
     </div>
 
     <div class="two">
@@ -175,7 +179,7 @@
 
 <!-- ======================= COMPARISONS ======================= -->
 <section class="section alt" id="compare">
-  <div class="container wide">
+  <div class="container">
     <h2 class="section-title"><span>04</span>Interactive comparisons</h2>
     <p class="lead">Pick a scene, then pick a baseline. Every method gets exactly the same posed inputs and renders the same novel space-time camera path.
       Videos load only when you select them.</p>
@@ -228,7 +232,7 @@
 
 <!-- ======================= ROBUSTNESS ======================= -->
 <section class="section" id="robust">
-  <div class="container wide">
+  <div class="container">
     <h2 class="section-title"><span>05</span>Robustness</h2>
     <div class="two">
       <div class="card rob">
@@ -261,28 +265,25 @@
 
 <!-- ======================= RESULTS ======================= -->
 <section class="section alt" id="results">
-  <div class="container wide">
+  <div class="container">
     <h2 class="section-title"><span>06</span>Results</h2>
     <figure class="card fig">
       <img src="static/img/sota_views.png" alt="PSNR vs number of input views on Stereo4D, DyCheck and NVIDIA" loading="lazy">
       <figcaption>State of the art on three 4D benchmarks against six recent feed-forward methods (DyCheck and NVIDIA are out of domain).</figcaption>
     </figure>
-    <div class="two">
-      <figure class="card fig">
-        <img src="static/img/speed_mem_psnr.png" alt="Memory, speed and PSNR ablation" loading="lazy">
-        <figcaption><b>Controlled ablation</b> (same backbone, same training). One linear fast weight solved exactly beats a nonlinear MLP memory
-          updated by gradient steps, while using less memory and half the training time.</figcaption>
-      </figure>
-      <div class="card quote">
-        <p>&ldquo;Accurately writing tokens into memory matters as much as designing a more complex memory.&rdquo;</p>
-      </div>
-    </div>
+    <figure class="card fig">
+      <img src="static/img/speed_mem_psnr.png" alt="Memory, speed and PSNR ablation" loading="lazy">
+      <figcaption><b>Controlled ablation</b> (Stereo4D 128&sup2;, same backbone, same training, trained on 32 views). One linear fast weight solved exactly
+        beats a nonlinear SwiGLU memory updated by gradient steps (FSM-style) and a solver without our centering and prior (MesaNet-style), while using
+        less memory and about half the training time; the FSM-style memory peaks at its training setting and then degrades as interference accumulates.</figcaption>
+    </figure>
+    <div class="quote-band"><p>&ldquo;Accurately writing tokens into memory matters as much as designing a more complex memory.&rdquo;</p></div>
   </div>
 </section>
 
 <!-- ======================= UNCERTAINTY ======================= -->
 <section class="section" id="uncertainty">
-  <div class="container wide">
+  <div class="container">
     <h2 class="section-title"><span>07</span>Uncertainty</h2>
     <div class="two">
       <div>
@@ -293,12 +294,11 @@
           <img class="inline-fig" src="static/img/bayes_1d.png" alt="1D Bayesian linear regression: narrow band near written tokens, wide band away from them" loading="lazy">
           <h3>Aleatoric: learned</h3>
           <p>Even where the inputs cover a region, the model can still render it badly: fine texture, reflections, fast motion. A small head reads
-            each final query token <b>detached</b> (stop-gradient, so it never changes the rendering) and predicts a per-pixel log-variance
-            U<sub>ale</sub>. The total is</p>
-          <div class="math-line">U = sg[U<sub>epi</sub>] + U<sub>ale</sub></div>
-          <p>Both maps are trained with a Gaussian negative log-likelihood of the (detached) per-pixel error e<sub>s</sub>,
-            NLL(V) = &frac12;&nbsp;&Sigma;<sub>s</sub> (e<sub>s</sub><sup>2</sup>e<sup>&minus;V<sub>s</sub></sup> + V<sub>s</sub>), minimized when the predicted variance equals the squared error:</p>
-          <div class="math-line">L<sub>unc</sub> = NLL(U) + NLL(U<sub>epi</sub>)</div>
+            each final query token <b>detached</b> (stop-gradient, so it never changes the rendering) and predicts a per-pixel log-variance\n            \(U_{\mathrm{ale}}\). The total is</p>
+          <div class="math-line">\(U=\mathrm{sg}[U_{\mathrm{epi}}]+U_{\mathrm{ale}}\)</div>
+          <p>Both maps are trained with a Gaussian negative log-likelihood of the (detached) per-pixel error \(e_s\),
+            \(\mathrm{NLL}(V)=\tfrac12\sum_s\big(e_s^2\,e^{-V_s}+V_s\big)\), minimized when the predicted variance equals the squared error:</p>
+          <div class="math-line">\(L_{\mathrm{unc}}=\mathrm{NLL}(U)+\mathrm{NLL}(U_{\mathrm{epi}})\)</div>
           <p class="small muted">Thanks to the stop-gradient, the first term trains only the aleatoric head, the second only the L+1 fusion weights of the
             epistemic map; the aleatoric part learns exactly what the epistemic part misses. Cost: 0.2&nbsp;dB.</p>
         </div>
@@ -378,8 +378,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127113653"></script>
-<script src="static/js/cases.js?v=20261127113653"></script>
-<script src="static/js/main.js?v=20261127113653"></script>
+<script src="static/js/config.js?v=20261127113950"></script>
+<script src="static/js/cases.js?v=20261127113950"></script>
+<script src="static/js/main.js?v=20261127113950"></script>
 </body>
 </html>
