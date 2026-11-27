@@ -199,6 +199,9 @@ sup { font-size: .62em; }
 .text h3 { margin: 0 0 6px; font-size: 18px; }
 .text p { color: var(--ink-2); margin: 0 0 18px; }
 #uncertainty .two > div > .card { height: 100%; box-sizing: border-box; }
+#method .two { align-items: stretch; }
+#method .two > .fig { display: flex; flex-direction: column; }
+#method .two > .fig img { flex: 1 1 auto; object-fit: contain; min-height: 0; }
 /* labels below the video (these videos carry their own burnt-in text in the top-left corner) */
 .avs-grid .pane, .rob .pair .pane { aspect-ratio: auto; background: none; overflow: visible; display: flex; flex-direction: column-reverse; gap: 6px; }
 .avs-grid .pane, .rob .pair .pane { min-width: 0; }

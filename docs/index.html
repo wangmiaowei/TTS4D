@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="static/css/style.css?v=20261127113230">
+<link rel="stylesheet" href="static/css/style.css?v=20261127113418">
 </head>
 <body>
 
@@ -163,8 +163,11 @@
       </figure>
       <figure class="card fig">
         <img src="static/img/readweights.jpg" alt="Relative read weights FSM vs TTS" loading="lazy">
-        <figcaption><b>Where does each read come from?</b> FSM (TTT) spreads every read over all tokens; TTS returns mainly each token and its spatial
-          neighbors (diagonal bands). Geometric mean over 24 layers, 32 input views.</figcaption>
+        <figcaption><b>Where does each read come from?</b> Each <b>row</b> is the read of one token of the first view, each <b>column</b> the value
+          of one written token; the <b>color</b> is how much that value contributes, relative to the token's own value (red: as much as itself, blue: almost
+          nothing). <b>FSM (TTT)</b> is yellow everywhere: every read is a blend of many tokens' values (interference).
+          <b>Ours (TTS)</b> is mostly blue with a sharp diagonal: each read returns its own value, plus faint parallel bands from its spatial neighbors.
+          32 input views, geometric mean over 24 layers, computed by automatic differentiation.</figcaption>
       </figure>
     </div>
   </div>
@@ -362,8 +365,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127113230"></script>
-<script src="static/js/cases.js?v=20261127113230"></script>
-<script src="static/js/main.js?v=20261127113230"></script>
+<script src="static/js/config.js?v=20261127113418"></script>
+<script src="static/js/cases.js?v=20261127113418"></script>
+<script src="static/js/main.js?v=20261127113418"></script>
 </body>
 </html>
