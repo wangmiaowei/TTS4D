@@ -373,3 +373,7 @@ sup { font-size: .62em; }
 .two.res .fig { display: flex; flex-direction: column; padding: 14px; }
 .two.res .fig img { height: 230px; width: 100%; object-fit: contain; }
 .two.res .fig figcaption { font-size: 13.5px; }
+
+.epi-plot { float: right; width: 44%; margin: 0 0 6px 14px; border-radius: 8px; background: #fff; border: 1px solid var(--line); }
+.two.unc .text h3:not(:first-child) { clear: both; }
+@media (max-width: 860px) { .epi-plot { float: none; width: 100%; margin: 0 0 8px; } }

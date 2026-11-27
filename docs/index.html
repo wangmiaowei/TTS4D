@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127114800">
+<link rel="stylesheet" href="static/css/style.css?v=20261127114836">
 </head>
 <body>
 
@@ -289,6 +289,7 @@
     <div class="two unc">
       <div class="card text">
         <h3>Epistemic \(U_{\mathrm{epi}}\): from the solver's posterior</h3>
+        <img class="epi-plot" src="static/img/bayes_1d.png" alt="1D Bayesian linear regression: narrow band near written tokens, wide band away from them" loading="lazy">
         <p>The write is a Bayesian linear regression (Gaussian noise, Gaussian prior around \(W_2^{\mathrm{init}}\)): our solve is its MAP estimate,
           and a read has posterior variance</p>
         <div class="math-line">\(\mathrm{Var}[o_m]=\sigma^2u_m,\quad u_m=\tilde\psi_m^\top P^{-1}\tilde\psi_m\)</div>
@@ -369,8 +370,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127114800"></script>
-<script src="static/js/cases.js?v=20261127114800"></script>
-<script src="static/js/main.js?v=20261127114800"></script>
+<script src="static/js/config.js?v=20261127114836"></script>
+<script src="static/js/cases.js?v=20261127114836"></script>
+<script src="static/js/main.js?v=20261127114836"></script>
 </body>
 </html>
