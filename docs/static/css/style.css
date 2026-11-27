@@ -198,6 +198,15 @@ sup { font-size: .62em; }
 .text { padding: 24px; }
 .text h3 { margin: 0 0 6px; font-size: 18px; }
 .text p { color: var(--ink-2); margin: 0 0 18px; }
+#uncertainty .two > div > .card { height: 100%; box-sizing: border-box; }   /* both cards equally tall */
+.tbl-wrap { overflow-x: auto; margin-top: 12px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.tbl caption { text-align: left; font-size: 13px; color: var(--muted); padding-bottom: 6px; }
+.tbl th, .tbl td { padding: 5px 8px; text-align: center; border-bottom: 1px solid var(--line); }
+.tbl th:first-child, .tbl td:first-child { text-align: left; white-space: nowrap; }
+.tbl thead th { font-weight: 600; color: var(--ink-2); }
+.tbl tr.hl td { background: rgba(11,114,217,.08); font-weight: 700; }
+.tbl-note { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
 .inline-fig { width: 100%; border-radius: 10px; margin: -4px 0 20px; background: #fff; }
 .avs { padding: 20px; margin-top: 24px; }
 .avs h3 { margin: 0 0 4px; }
