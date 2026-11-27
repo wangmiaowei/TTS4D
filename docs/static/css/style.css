@@ -342,3 +342,11 @@ sup { font-size: .62em; }
 .fig img { max-height: 78vh; object-fit: contain; }
 
 .container > .fig + .fig, .container > .fig + .two, .container > .two + .fig { margin-top: 22px; }
+
+/* phones: one swipeable row of dataset chips */
+@media (max-width: 720px) {
+  .cmp-top .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; width: 100%; padding-bottom: 2px; }
+  .cmp-top .filters::-webkit-scrollbar { display: none; }
+  .cmp-top .chip { flex: 0 0 auto; }
+  .case-strip .case { flex-basis: 132px; }
+}

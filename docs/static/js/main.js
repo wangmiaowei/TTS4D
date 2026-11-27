@@ -125,17 +125,18 @@
   function renderGrid() {
     grid.innerHTML = "";
     const list = CASES.filter((c) => curFilter === "All" || c.group === curFilter);
+    const phone = window.innerWidth < 720;          // phones: every scene in one swipeable strip, no "More cases" button
     list.forEach((c, i) => {
       const d = document.createElement("div");
       d.className = "case" + (curCase && curCase.id === c.id ? " active" : "");
-      d.hidden = !showAll && curFilter === "All" && i >= INITIAL;
-      d.innerHTML = '<img loading="lazy" alt="" src="' + media("cmp/" + c.id + "/poster.jpg") + '"><div class="cap">' + c.title +
+      d.hidden = !phone && !showAll && curFilter === "All" && i >= INITIAL;
+      d.innerHTML = '<img ' + (i < 6 ? '' : 'loading="lazy" ') + 'alt="" src="' + media("cmp/" + c.id + "/poster.jpg") + '"><div class="cap">' + c.title +
         '<small>' + c.dataset + ' · ' + c.nin + ' views</small></div>';
       d.onclick = () => selectCase(c, true);
       grid.appendChild(d);
     });
-    const hidden = list.filter((_, i) => !showAll && curFilter === "All" && i >= INITIAL).length;
-    moreBtn.hidden = hidden === 0 && !showAll;
+    const hidden = phone ? 0 : list.filter((_, i) => !showAll && curFilter === "All" && i >= INITIAL).length;
+    moreBtn.hidden = phone || (hidden === 0 && !showAll);
     moreBtn.firstChild.textContent = showAll ? "Fewer cases " : "More cases ";
     $("#more-count").textContent = showAll ? "" : "(" + hidden + ")";
   }

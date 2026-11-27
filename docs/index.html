@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127114059">
+<link rel="stylesheet" href="static/css/style.css?v=20261127114233">
 </head>
 <body>
 
@@ -288,11 +288,18 @@
     <div class="two">
       <div>
         <div class="card text">
-          <h3>Epistemic: from the solver's posterior</h3>
-          <p>The write is a Bayesian linear regression; the solve is its MAP estimate. A read's posterior variance is large where no input
-            supports it &mdash; hidden surfaces, regions outside all views, or times far from all inputs &mdash; and costs one triangular product.</p>
+          <h3>Epistemic: from the solver's posterior, \(U_{\mathrm{epi}}\)</h3>
+          <p>Each TTS write is a Bayesian linear regression,
+            \(\tilde v_n=W_2\tilde\psi_n+\varepsilon_n\) with \(\varepsilon_n\sim\mathcal N(0,\sigma^2/a_n)\) and prior \(W_2\sim\mathcal N(W_2^{\mathrm{init}},\sigma^2/\lambda)\).
+            Its MAP estimate is exactly our solve \(W_2^\star\), and each row of \(W_2\) has posterior covariance \(\sigma^2P^{-1}\). The read
+            \(o_m=\bar v+W_2\tilde\psi_m\) is linear in \(W_2\), so its variance is</p>
+          <div class="math-line">\(\mathrm{Var}[o_m]=\sigma^2u_m,\qquad u_m=\tilde\psi_m^\top P^{-1}\tilde\psi_m=\lVert L^{-1}\tilde\psi_m\rVert^2\)</div>
+          <p>\(u_m\) is small where many inputs share the query's features and largest where none do (hidden surfaces, regions outside all views,
+            times far from all inputs); it costs one triangular product with the Cholesky factor \(L\) the solve already has.
+            The 24 layers are fused into one map with only \(L{+}1\) learned weights:</p>
+          <div class="math-line">\(U_{\mathrm{epi}}=\beta_0+\sum_l\beta_l\log(u_{m,l}/\bar u_l)\)</div>
           <img class="inline-fig" src="static/img/bayes_1d.png" alt="1D Bayesian linear regression: narrow band near written tokens, wide band away from them" loading="lazy">
-          <h3>Aleatoric: learned</h3>
+          <h3>Aleatoric: learned, \(U_{\mathrm{ale}}\)</h3>
           <p>Even where the inputs cover a region, the model can still render it badly: fine texture, reflections, fast motion. A small head reads
             each final query token <b>detached</b> (stop-gradient, so it never changes the rendering) and predicts a per-pixel log-variance \(U_{\mathrm{ale}}\). The total is</p>
           <div class="math-line">\(U=\mathrm{sg}[U_{\mathrm{epi}}]+U_{\mathrm{ale}}\)</div>
@@ -378,8 +385,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127114059"></script>
-<script src="static/js/cases.js?v=20261127114059"></script>
-<script src="static/js/main.js?v=20261127114059"></script>
+<script src="static/js/config.js?v=20261127114233"></script>
+<script src="static/js/cases.js?v=20261127114233"></script>
+<script src="static/js/main.js?v=20261127114233"></script>
 </body>
 </html>
