@@ -13,7 +13,7 @@
 [**Project page**](https://wangmiaowei.github.io/TTS4D/) &nbsp;|&nbsp;
 [**Weights** 🤗](https://huggingface.co/miaoweiwang/TTS4D) &nbsp;|&nbsp;
 [**Live demo**](https://wangmiaowei.github.io/TTS4D/demo.html) &nbsp;|&nbsp;
-[**Slides**](https://wangmiaowei.github.io/TTS4D/static/slides/TTS_talk.pdf)
+[**Slides**](https://huggingface.co/datasets/miaoweiwang/TTS4D-media/resolve/main/slides/TTS_talk.pptx)
 
 <img src="docs/static/img/teaser.jpg" width="100%">
 
