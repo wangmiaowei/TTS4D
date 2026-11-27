@@ -400,3 +400,5 @@ sup { font-size: .62em; }
 @media (prefers-color-scheme: dark) { .epi-plot, .fig img { background: #fff; } }
 .two.unc .fig img { max-height: none; width: 100%; }
 .two.unc .tbl th, .two.unc .tbl td { padding: 5px 6px; }
+
+.tbl tr.sep td { border-top: 1.5px solid var(--ink-2); color: var(--muted); font-style: italic; }
