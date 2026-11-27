@@ -16,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
-<link rel="stylesheet" href="static/css/style.css?v=20261127114504">
+<link rel="stylesheet" href="static/css/style.css?v=20261127114658">
 </head>
 <body>
 
@@ -285,47 +285,29 @@
 <section class="section" id="uncertainty">
   <div class="container">
     <h2 class="section-title"><span>07</span>Uncertainty</h2>
-    <div class="two">
-      <div>
-        <div class="card text">
-          <h3>Epistemic: from the solver's posterior, \(U_{\mathrm{epi}}\)</h3>
-          <p>Each TTS write is a Bayesian linear regression,
-            \(\tilde v_n=W_2\tilde\psi_n+\varepsilon_n\) with \(\varepsilon_n\sim\mathcal N(0,\sigma^2/a_n)\) and prior \(W_2\sim\mathcal N(W_2^{\mathrm{init}},\sigma^2/\lambda)\).
-            Its MAP estimate is exactly our solve \(W_2^\star\), and each row of \(W_2\) has posterior covariance \(\sigma^2P^{-1}\). The read
-            \(o_m=\bar v+W_2\tilde\psi_m\) is linear in \(W_2\), so its variance is</p>
-          <div class="math-line">\(\mathrm{Var}[o_m]=\sigma^2u_m,\qquad u_m=\tilde\psi_m^\top P^{-1}\tilde\psi_m=\lVert L^{-1}\tilde\psi_m\rVert^2\)</div>
-          <p>\(u_m\) is small where many inputs share the query's features and largest where none do (hidden surfaces, regions outside all views,
-            times far from all inputs); it costs one triangular product with the Cholesky factor \(L\) the solve already has.
-            The 24 layers are fused into one map with only \(L{+}1\) learned weights:</p>
-          <div class="math-line">\(U_{\mathrm{epi}}=\beta_0+\sum_l\beta_l\log(u_{m,l}/\bar u_l)\)</div>
-          <h3>Aleatoric: learned, \(U_{\mathrm{ale}}\)</h3>
-          <p>Even where the inputs cover a region, the model can still render it badly: fine texture, reflections, fast motion. A small head reads
-            each final query token <b>detached</b> (stop-gradient, so it never changes the rendering) and predicts a per-pixel log-variance \(U_{\mathrm{ale}}\). The total is</p>
-          <div class="math-line">\(U=\mathrm{sg}[U_{\mathrm{epi}}]+U_{\mathrm{ale}}\)</div>
-          <p>Both maps are trained with a Gaussian negative log-likelihood of the (detached) per-pixel error \(e_s\),
-            \(\mathrm{NLL}(V)=\tfrac12\sum_s\big(e_s^2\,e^{-V_s}+V_s\big)\), minimized when the predicted variance equals the squared error:</p>
-          <div class="math-line">\(L_{\mathrm{unc}}=\mathrm{NLL}(U)+\mathrm{NLL}(U_{\mathrm{epi}})\)</div>
-          <p class="small muted">Thanks to the stop-gradient, the first term trains only the aleatoric head, the second only the L+1 fusion weights of the
-            epistemic map; the aleatoric part learns exactly what the epistemic part misses. Cost: 0.2&nbsp;dB.</p>
-        </div>
+    <div class="two unc">
+      <div class="card text">
+        <h3>Epistemic \(U_{\mathrm{epi}}\): from the solver's posterior</h3>
+        <p>The write is a Bayesian linear regression (Gaussian noise, Gaussian prior around \(W_2^{\mathrm{init}}\)): our solve is its MAP estimate,
+          and a read has posterior variance</p>
+        <div class="math-line">\(\mathrm{Var}[o_m]=\sigma^2u_m,\quad u_m=\tilde\psi_m^\top P^{-1}\tilde\psi_m\)</div>
+        <p>large where no input covers the query: hidden surfaces, outside all views, far-away times. Fused over the 24 layers into \(U_{\mathrm{epi}}\).</p>
+        <h3>Aleatoric \(U_{\mathrm{ale}}\): learned</h3>
+        <p>A small head on the <b>detached</b> query token predicts what covered inputs still cannot explain (fine texture, reflections, fast motion).
+          Both are trained with a Gaussian NLL of the pixel error:</p>
+        <div class="math-line">\(U=\mathrm{sg}[U_{\mathrm{epi}}]+U_{\mathrm{ale}},\quad L_{\mathrm{unc}}=\mathrm{NLL}(U)+\mathrm{NLL}(U_{\mathrm{epi}})\)</div>
       </div>
       <figure class="card fig">
         <img src="static/img/unc_maps.jpg" alt="Epistemic, aleatoric and combined uncertainty" loading="lazy">
-        <figcaption><b>Only 4 input views:</b> large parts of the scene are not covered by any input, and these areas dominate the error.
-          The epistemic map points them out (smooth, at the scale of the missing coverage); the aleatoric map adds fine detail where content is
-          hard to render; their sum follows the error best.</figcaption>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <caption>Correlation of each map with the error (Pearson L<sub>1</sub>&nbsp;&uarr;, Stereo4D, 128&sup2;)</caption>
-            <thead><tr><th>input views</th><th>4</th><th>8</th><th>16</th><th>32</th><th>64</th><th>128</th></tr></thead>
-            <tbody>
-              <tr><td>Epistemic</td><td><b>0.394</b></td><td><b>0.414</b></td><td>0.390</td><td>0.364</td><td>0.359</td><td>0.386</td></tr>
-              <tr><td>Aleatoric</td><td>0.253</td><td>0.342</td><td><b>0.406</b></td><td><b>0.434</b></td><td><b>0.441</b></td><td><b>0.459</b></td></tr>
-              <tr class="hl"><td>Sum (ours)</td><td>0.430</td><td>0.531</td><td>0.575</td><td>0.594</td><td>0.602</td><td>0.603</td></tr>
-            </tbody>
-          </table>
-          <p class="tbl-note">Few views: epistemic (missing coverage) explains the error better. Many views: aleatoric (hard content) takes over. The two are nearly uncorrelated, so their sum is best everywhere.</p>
-        </div>
+        <figcaption><b>4 input views:</b> uncovered areas dominate the error; the epistemic map finds them, the aleatoric map adds detail, their sum follows the error best.</figcaption>
+        <table class="tbl">
+          <thead><tr><th>Pearson L<sub>1</sub>&uarr; / views</th><th>4</th><th>8</th><th>16</th><th>32</th><th>64</th><th>128</th></tr></thead>
+          <tbody>
+            <tr><td>Epistemic</td><td><b>0.394</b></td><td><b>0.414</b></td><td>0.390</td><td>0.364</td><td>0.359</td><td>0.386</td></tr>
+            <tr><td>Aleatoric</td><td>0.253</td><td>0.342</td><td><b>0.406</b></td><td><b>0.434</b></td><td><b>0.441</b></td><td><b>0.459</b></td></tr>
+            <tr class="hl"><td>Sum (ours)</td><td>0.430</td><td>0.531</td><td>0.575</td><td>0.594</td><td>0.602</td><td>0.603</td></tr>
+          </tbody>
+        </table>
       </figure>
     </div>
     <div class="card avs">
@@ -384,8 +366,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=20261127114504"></script>
-<script src="static/js/cases.js?v=20261127114504"></script>
-<script src="static/js/main.js?v=20261127114504"></script>
+<script src="static/js/config.js?v=20261127114658"></script>
+<script src="static/js/cases.js?v=20261127114658"></script>
+<script src="static/js/main.js?v=20261127114658"></script>
 </body>
 </html>

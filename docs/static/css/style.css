@@ -199,7 +199,6 @@ sup { font-size: .62em; }
 .text { padding: 24px; }
 .text h3 { margin: 0 0 6px; font-size: 18px; }
 .text p { color: var(--ink-2); margin: 0 0 18px; }
-#uncertainty .two > div > .card { height: 100%; box-sizing: border-box; }
 #method .two { align-items: stretch; }
 #method .two > .fig { display: flex; flex-direction: column; }
 #method .two > .fig img { flex: 1 1 auto; object-fit: contain; min-height: 0; }
@@ -352,6 +351,19 @@ sup { font-size: .62em; }
 }
 
 /* uncertainty: the right card is a column, its table sits at the bottom so it lines up with the end of the left card */
-#uncertainty .two > figure.card { display: flex; flex-direction: column; height: 100%; box-sizing: border-box; }
-#uncertainty .two > figure.card .tbl-wrap { flex: 1 1 auto; display: flex; flex-direction: column; padding-top: 4px; }
-#uncertainty .two > figure.card .tbl { flex: 1 1 auto; }
+
+/* compact uncertainty block: fits one screen */
+.two.unc { align-items: stretch; margin-top: 0; }
+.two.unc > .card { height: auto; }
+.two.unc .text { padding: 18px 22px; }
+.two.unc .text h3 { font-size: 16.5px; margin: 0 0 4px; }
+.two.unc .text h3 + p { margin-top: 0; }
+.two.unc .text p { font-size: 14.5px; margin: 0 0 8px; }
+.two.unc .text h3:not(:first-child) { margin-top: 14px; }
+.two.unc .math-line { margin: 2px 0 8px; padding: 6px; font-size: 16px; }
+.two.unc .fig { padding: 12px; display: block; }
+.two.unc .fig img { max-height: 300px; width: auto; max-width: 100%; margin: 0 auto; }
+.two.unc .fig figcaption { margin-top: 6px; font-size: 13.5px; }
+.two.unc .tbl { margin-top: 8px; font-size: 12.5px; }
+.two.unc .tbl th, .two.unc .tbl td { padding: 3px 6px; }
+#uncertainty .avs { margin-top: 16px; }
