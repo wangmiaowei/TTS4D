@@ -179,6 +179,7 @@ sup { font-size: .62em; }
 /* robustness */
 .rob { padding: 20px; }
 .rob h3 { margin: 0 0 4px; }
+.rob > p.small { min-height: 3.3em; margin: 0 0 4px; }   /* same height in both cards so the selectors and videos line up */
 .seg { display: inline-flex; background: var(--bg-alt); border: 1px solid var(--line); border-radius: 10px; padding: 3px; margin: 10px 0 14px; }
 .seg button { border: 0; background: transparent; padding: 6px 14px; border-radius: 8px; font: 600 14px Inter; color: var(--ink-2); cursor: pointer; }
 .seg button.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
