@@ -350,3 +350,7 @@ sup { font-size: .62em; }
   .cmp-top .chip { flex: 0 0 auto; }
   .case-strip .case { flex-basis: 132px; }
 }
+
+/* uncertainty: the right card is a column, its table sits at the bottom so it lines up with the end of the left card */
+#uncertainty .two > figure.card { display: flex; flex-direction: column; height: 100%; box-sizing: border-box; }
+#uncertainty .two > figure.card .tbl-wrap { margin-top: auto; padding-top: 12px; }
