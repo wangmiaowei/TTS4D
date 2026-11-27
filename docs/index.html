@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="static/css/style.css?v=202611271120">
+<link rel="stylesheet" href="static/css/style.css?v=202611271126">
 </head>
 <body>
 
@@ -97,7 +97,7 @@
 <!-- ======================= VIDEO ======================= -->
 <section class="section" id="video">
   <div class="container">
-    <h2 class="section-title"><span>01</span>Results video</h2>
+    <h2 class="section-title"><span>01</span>Results video <em class="pill">&#128266; with narration</em></h2>
     <div class="video-embed card" id="yt-wrap" data-yt="">
       <div class="yt-placeholder">
         <p>Narrated results video (3:50): comparisons, robustness, uncertainty and the live viewer.</p>
@@ -177,40 +177,40 @@
     <p class="lead">Pick a scene, then pick a baseline. Every method gets exactly the same posed inputs and renders the same novel space-time camera path.
       Videos load only when you select them.</p>
 
-    <div class="filters" id="ds-filters"></div>
-    <div class="cases" id="case-grid"></div>
-    <div class="more-wrap"><button class="btn-more" id="btn-more">More cases <span id="more-count"></span></button></div>
-
-    <div class="viewer card" id="viewer">
-      <div class="viewer-head">
-        <div>
-          <div class="viewer-title" id="v-title">Select a scene above</div>
-          <div class="viewer-sub" id="v-sub"></div>
-        </div>
+    <div class="cmp card" id="viewer">
+      <div class="cmp-top">
+        <div class="filters" id="ds-filters"></div>
         <div class="mode-toggle" role="tablist">
           <button class="active" data-mode="side">Side by side</button>
           <button data-mode="swipe">Swipe</button>
         </div>
       </div>
-
-      <div class="method-bar" id="method-bar"></div>
-
+      <div class="case-strip">
+        <div class="cases" id="case-grid"></div>
+        <button class="btn-more" id="btn-more">More cases <span id="more-count"></span></button>
+      </div>
+      <div class="cmp-head">
+        <div class="cmp-title"><span class="viewer-title" id="v-title">Select a scene</span><span class="viewer-sub" id="v-sub"></span></div>
+        <div class="method-bar" id="method-bar"></div>
+      </div>
       <div class="stage" id="stage">
-        <div class="pane-row top">
-          <div class="pane"><div class="pane-lbl">Input (nearest in time)</div><video muted playsinline loop preload="none" data-role="input"></video></div>
-          <div class="pane"><div class="pane-lbl">Novel camera path (top view)</div><video muted playsinline loop preload="none" data-role="camera"></video></div>
-          <div class="pane"><div class="pane-lbl">Ours: uncertainty</div><video muted playsinline loop preload="none" data-role="unc"></video>
+        <div class="band" id="band">
+          <div class="stack">
+            <div class="pane sm"><div class="pane-lbl">Input</div><video muted playsinline loop preload="none" data-role="input"></video></div>
+            <div class="pane sm"><div class="pane-lbl">Camera path</div><video muted playsinline loop preload="none" data-role="camera"></video></div>
+          </div>
+          <div class="pair" id="main-side">
+            <div class="pane big"><div class="pane-lbl method" id="bl-lbl">Baseline</div><video muted playsinline loop preload="none" data-role="base"></video></div>
+            <div class="pane big"><div class="pane-lbl ours">Ours</div><video muted playsinline loop preload="none" data-role="ours"></video></div>
+          </div>
+          <div class="swipe-wrap" id="main-swipe" hidden>
+            <video muted playsinline loop preload="none" data-role="swipe-ours"></video>
+            <div class="swipe-top" id="swipe-top"><video muted playsinline loop preload="none" data-role="swipe-base"></video></div>
+            <div class="swipe-handle" id="swipe-handle"><span></span></div>
+            <div class="pane-lbl method sl" id="swipe-bl-lbl">Baseline</div><div class="pane-lbl ours sr">Ours</div>
+          </div>
+          <div class="pane big"><div class="pane-lbl ours">Ours: uncertainty</div><video muted playsinline loop preload="none" data-role="unc"></video>
             <div class="cbar"><span>certain</span><i></i><span>uncertain</span></div></div>
-        </div>
-        <div class="pane-row main side" id="main-side">
-          <div class="pane big"><div class="pane-lbl ours">Ours</div><video muted playsinline loop preload="none" data-role="ours"></video></div>
-          <div class="pane big"><div class="pane-lbl" id="bl-lbl">Baseline</div><video muted playsinline loop preload="none" data-role="base"></video></div>
-        </div>
-        <div class="swipe-wrap" id="main-swipe" hidden>
-          <video muted playsinline loop preload="none" data-role="swipe-base"></video>
-          <div class="swipe-top" id="swipe-top"><video muted playsinline loop preload="none" data-role="swipe-ours"></video></div>
-          <div class="swipe-handle" id="swipe-handle"><span></span></div>
-          <div class="pane-lbl ours sl">Ours</div><div class="pane-lbl sr" id="swipe-bl-lbl">Baseline</div>
         </div>
         <div class="controls">
           <button id="btn-play" class="ctl">❚❚</button>
@@ -218,7 +218,7 @@
           <select id="speed" class="ctl"><option value="0.5">0.5&times;</option><option value="1" selected>1&times;</option></select>
         </div>
       </div>
-      <p class="muted small">&dagger; C4G takes no cameras; we align its poses at test time. Uncertainty colors: log-variance, blue = certain, red = uncertain.</p>
+      <p class="muted small cmp-note">&dagger; C4G takes no cameras; we align its poses at test time. Uncertainty: log-variance, blue = certain, red = uncertain.</p>
     </div>
   </div>
 </section>
@@ -348,8 +348,8 @@
   <p>Page template written for this project. Comparison videos use the authors' released checkpoints of each baseline.</p>
 </footer>
 
-<script src="static/js/config.js?v=202611271120"></script>
-<script src="static/js/cases.js?v=202611271120"></script>
-<script src="static/js/main.js?v=202611271120"></script>
+<script src="static/js/config.js?v=202611271126"></script>
+<script src="static/js/cases.js?v=202611271126"></script>
+<script src="static/js/main.js?v=202611271126"></script>
 </body>
 </html>

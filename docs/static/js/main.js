@@ -135,7 +135,7 @@
       grid.appendChild(d);
     });
     const hidden = list.filter((_, i) => !showAll && curFilter === "All" && i >= INITIAL).length;
-    moreBtn.parentElement.hidden = hidden === 0 && !showAll;
+    moreBtn.hidden = hidden === 0 && !showAll;
     moreBtn.firstChild.textContent = showAll ? "Fewer cases " : "More cases ";
     $("#more-count").textContent = showAll ? "" : "(" + hidden + ")";
   }
@@ -175,8 +175,7 @@
     renderGrid();
     const st = $("#stage");
     st.style.setProperty("--ar", c.ar || 16 / 9);
-    st.classList.toggle("sq", c.ar >= 0.95 && c.ar < 1.3);
-    st.classList.toggle("pt", c.ar < 0.95);
+    layout();
     $("#v-title").textContent = c.title;
     $("#v-sub").textContent = c.dataset + " · " + c.nin + " posed input views · novel space-time camera path";
     $$(".mbtn", bar).forEach((b) => { b.disabled = c.videos.indexOf(b.dataset.m) < 0; });
@@ -204,6 +203,26 @@
       if (curCase) selectCase(curCase, false);
     };
   });
+
+  /* band layout: Input/Camera (stacked) | method | Ours | uncertainty, sized to fit the width and the screen height */
+  function layout() {
+    const stage = $("#stage"), band = $("#band");
+    const ar = (curCase && curCase.ar) || 16 / 9, gap = 10, W = stage.clientWidth;
+    const narrow = W < 720;
+    band.classList.toggle("narrow", narrow);
+    let h, hs;
+    if (narrow) { h = Math.min((W - gap) / 2 / ar, window.innerHeight * 0.4); hs = h; }
+    else {
+      h = (W - 3 * gap + gap * ar / 2) / (3.5 * ar);
+      h = Math.max(90, Math.min(h, window.innerHeight * 0.55));
+      hs = (h - gap) / 2;
+    }
+    stage.style.setProperty("--h", h + "px");
+    stage.style.setProperty("--hs", hs + "px");
+    stage.style.setProperty("--sw", (2 * h * ar + gap) + "px");
+  }
+  window.addEventListener("resize", layout);
+  layout();
 
   /* swipe */
   (function swipe() {
